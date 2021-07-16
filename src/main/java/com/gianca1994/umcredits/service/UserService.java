@@ -37,7 +37,7 @@ public class UserService {
     }
 
     private String encryptPassword(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt(10));
+        return BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
 
     public UserModel saveUser(UserModel user) {
