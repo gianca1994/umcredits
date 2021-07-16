@@ -35,12 +35,6 @@ public class UserModel {
     private Set<SubjectModel> subjects = new HashSet<>();
 
 
-    // EJ con CURL:
-    // curl --header "Content-Type: application/json" --request POST --data '{"email":"gianca9405@gmail.com","username":"gianca","first_name":"giancarlo","last_name":"galvarini","password":"asdasd"}' http://localhost:8080/
-
-    // Insert SQL:
-    // INSERT INTO users(email, first_name, last_name, password) VALUES ('gianca9405@gmail.com', 'giancarlo', 'galvarini', 'asdasd');
-
     public UserModel() {
     }
 

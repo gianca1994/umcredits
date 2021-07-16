@@ -11,6 +11,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     @Autowired
     UserService userService;
 
@@ -19,7 +20,7 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @PostMapping()
+    @PostMapping
     public UserModel saveUser(@RequestBody UserModel user) {
         return this.userService.saveUser(user);
     }
