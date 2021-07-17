@@ -1,6 +1,7 @@
 package com.gianca1994.umcredits.controller;
 
 import com.gianca1994.umcredits.model.UserModel;
+import com.gianca1994.umcredits.service.SubjectService;
 import com.gianca1994.umcredits.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    SubjectService subjectService;
 
     @GetMapping()
     public ArrayList<UserModel> getUsers() {

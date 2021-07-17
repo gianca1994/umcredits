@@ -8,15 +8,16 @@ import javax.persistence.*;
 public class SubjectModel {
 
     @Id
+    @Column(unique = true, updatable = false)
     private Long code;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private byte credits;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private short year;
 
 
