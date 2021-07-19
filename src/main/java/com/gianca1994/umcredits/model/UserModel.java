@@ -25,8 +25,7 @@ public class UserModel {
     @Column(nullable = false)
     private String lastName;
 
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_subjects",
             joinColumns = {@JoinColumn(name = "user_id")},
@@ -38,7 +37,12 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(String email, String password, String firstName, String lastName, Set<SubjectModel> subjects) {
+    public UserModel(String email,
+                     String password,
+                     String firstName,
+                     String lastName,
+                     Set<SubjectModel> subjects) {
+
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -90,4 +94,7 @@ public class UserModel {
         return subjects;
     }
 
+    public void setSubjects(Set<SubjectModel> subjects) {
+        this.subjects = subjects;
+    }
 }

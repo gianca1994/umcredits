@@ -62,4 +62,9 @@ public class UserController {
         userDeleteData.put("Response", "Deleted User ID: " + id);
         return userDeleteData;
     }
+
+    @PostMapping("/{id}/addsubject/{code}")
+    public Optional<UserModel> addSubjectToUser(@PathVariable Long id, @PathVariable Long code) {
+        return this.userService.addSubjectToUser(id, code);
+    }
 }

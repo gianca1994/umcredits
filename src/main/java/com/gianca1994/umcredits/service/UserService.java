@@ -75,4 +75,16 @@ public class UserService {
     public void deleteUser(Long id) {
         this.userRepository.deleteById(id);
     }
+
+    public Optional<UserModel> addSubjectToUser(Long id, Long code) {
+
+        return userRepository.findById(id).map(user -> {
+            user.setEmail(user.getEmail());
+            user.setFirstName(user.getFirstName());
+            user.setLastName(user.getLastName());
+            user.setPassword(user.getPassword());
+
+            return userRepository.save(user);
+        });
+    }
 }

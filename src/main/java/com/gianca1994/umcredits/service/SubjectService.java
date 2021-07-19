@@ -19,12 +19,12 @@ public class SubjectService {
         return (ArrayList<SubjectModel>) this.subjectRepository.findAll();
     }
 
-    public SubjectModel saveSubject(SubjectModel subject) {
-        return this.subjectRepository.save(subject);
-    }
-
     public Optional<SubjectModel> getSubject(Long code) {
         return subjectRepository.findById(code);
+    }
+
+    public SubjectModel saveSubject(SubjectModel subject) {
+        return this.subjectRepository.save(subject);
     }
 
     public SubjectModel updateSubject(SubjectModel newSubject, Long code) {
