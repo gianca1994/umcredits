@@ -3,6 +3,7 @@ package com.gianca1994.umcredits.controller;
 
 import com.gianca1994.umcredits.model.SubjectModel;
 import com.gianca1994.umcredits.service.SubjectService;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,11 @@ public class SubjectController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSubject(@PathVariable Long id) {
+    public JSONObject deleteSubject(@PathVariable Long id) {
+        JSONObject subjectDeleteData = new JSONObject();
+
         this.subjectService.deleteSubject(id);
+        subjectDeleteData.put("Response", "Material code removed: " + id);
+        return subjectDeleteData;
     }
 }

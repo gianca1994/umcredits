@@ -2,6 +2,7 @@ package com.gianca1994.umcredits.controller;
 
 import com.gianca1994.umcredits.model.UserModel;
 import com.gianca1994.umcredits.service.UserService;
+import net.minidev.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,11 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public JSONObject deleteUser(@PathVariable Long id) {
+        JSONObject userDeleteData = new JSONObject();
+
         this.userService.deleteUser(id);
+        userDeleteData.put("Response", "Deleted User ID: " + id);
+        return userDeleteData;
     }
 }
