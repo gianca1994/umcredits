@@ -14,10 +14,10 @@ public class SubjectModel {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private byte credits;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private short year;
 
 

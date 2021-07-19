@@ -21,14 +21,14 @@ public class SubjectController {
         return subjectService.getSubjects();
     }
 
-    @PostMapping()
-    public SubjectModel saveSubject(@RequestBody SubjectModel subject) {
-        return this.subjectService.saveSubject(subject);
-    }
-
     @GetMapping("/{id}")
     public Optional<SubjectModel> getSubject(@PathVariable Long id) {
         return this.subjectService.getSubject(id);
+    }
+
+    @PostMapping()
+    public SubjectModel saveSubject(@RequestBody SubjectModel subject) {
+        return this.subjectService.saveSubject(subject);
     }
 
     @PutMapping("/{id}")

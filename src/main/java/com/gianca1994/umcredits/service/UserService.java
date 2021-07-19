@@ -1,7 +1,10 @@
 package com.gianca1994.umcredits.service;
 
+import com.gianca1994.umcredits.model.SubjectModel;
 import com.gianca1994.umcredits.model.UserModel;
 import com.gianca1994.umcredits.repository.UserRepository;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +22,14 @@ public class UserService {
     private UserRepository userRepository;
 
     public ArrayList<UserModel> getUsers() {
+
         return (ArrayList<UserModel>) this.userRepository.findAll();
     }
 
     public Optional<UserModel> getUser(Long id) {
+
         return userRepository.findById(id);
     }
-
 
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
@@ -53,5 +57,21 @@ public class UserService {
             return userRepository.save(newUser);
         }
         return null;
+    }
+
+    public UserModel updateUser(UserModel newUser, Long id) {
+
+        return userRepository.findById(id).map(user -> {
+            user.setEmail(newUser.getEmail());
+            user.setFirstName(newUser.getFirstName());
+            user.setLastName(newUser.getLastName());
+            user.setPassword(encryptPassword(newUser.getPassword()));
+
+            return userRepository.save(user);
+
+        }).orElseGet(() -> {
+            newUser.setId(id);
+            return userRepository.save(newUser);
+        });
     }
 }
