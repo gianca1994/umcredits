@@ -1,6 +1,7 @@
 package com.gianca1994.umcredits.service;
 
 import com.gianca1994.umcredits.model.UserModel;
+import com.gianca1994.umcredits.repository.SubjectRepository;
 import com.gianca1994.umcredits.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SubjectRepository subjectRepository;
 
     public ArrayList<UserModel> getUsers() {
 
@@ -43,6 +47,10 @@ public class UserService {
 
     public UserModel saveUser(UserModel user) {
 
+        if (user.getPassword().length() < 8) {
+            return null;
+        }
+
         if (validateEmail(user.getEmail())) {
             UserModel newUser = new UserModel();
 
@@ -52,17 +60,18 @@ public class UserService {
             newUser.setLastName(user.getLastName());
 
             return userRepository.save(newUser);
+        } else {
+            return null;
         }
-        return null;
     }
 
     public UserModel updateUser(UserModel newUser, Long id) {
 
         return userRepository.findById(id).map(user -> {
             user.setEmail(newUser.getEmail());
+            user.setPassword(encryptPassword(newUser.getPassword()));
             user.setFirstName(newUser.getFirstName());
             user.setLastName(newUser.getLastName());
-            user.setPassword(encryptPassword(newUser.getPassword()));
 
             return userRepository.save(user);
 
@@ -73,17 +82,12 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        this.userRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     public Optional<UserModel> addSubjectToUser(Long id, Long code) {
 
         return userRepository.findById(id).map(user -> {
-            user.setEmail(user.getEmail());
-            user.setFirstName(user.getFirstName());
-            user.setLastName(user.getLastName());
-            user.setPassword(user.getPassword());
-
             return userRepository.save(user);
         });
     }

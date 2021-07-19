@@ -24,7 +24,7 @@ public class UserController {
         try {
             return userService.getUsers();
         } catch (Exception error) {
-            log.info(error);
+            log.error(error);
             return null;
         }
     }
@@ -34,7 +34,7 @@ public class UserController {
         try {
             return this.userService.getUser(id);
         } catch (Exception error) {
-            log.info(error);
+            log.error(error);
             return Optional.empty();
         }
     }
@@ -44,27 +44,27 @@ public class UserController {
         try {
             return this.userService.saveUser(user);
         } catch (Exception error) {
-            log.info(error);
+            log.error(error);
             return null;
         }
     }
 
     @PutMapping("/{id}")
     public UserModel updateUser(@RequestBody UserModel newUser, @PathVariable Long id) {
-        return this.userService.updateUser(newUser, id);
+        return userService.updateUser(newUser, id);
     }
 
     @DeleteMapping("/{id}")
     public JSONObject deleteUser(@PathVariable Long id) {
         JSONObject userDeleteData = new JSONObject();
 
-        this.userService.deleteUser(id);
+        userService.deleteUser(id);
         userDeleteData.put("Response", "Deleted User ID: " + id);
         return userDeleteData;
     }
 
-    @PostMapping("/{id}/addsubject/{code}")
+    @PutMapping("/{id}/addsubject/{code}")
     public Optional<UserModel> addSubjectToUser(@PathVariable Long id, @PathVariable Long code) {
-        return this.userService.addSubjectToUser(id, code);
+        return userService.addSubjectToUser(id, code);
     }
 }
