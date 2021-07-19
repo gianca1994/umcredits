@@ -52,7 +52,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserModel updateSubject(@RequestBody UserModel newUser, @PathVariable Long id) {
+    public UserModel updateUser(@RequestBody UserModel newUser, @PathVariable Long id) {
         return this.userService.updateUser(newUser, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        this.userService.deleteUser(id);
     }
 }

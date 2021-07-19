@@ -39,4 +39,8 @@ public class SubjectService {
             return subjectRepository.save(newSubject);
         });
     }
+
+    public void deleteSubject(Long code) {
+        this.subjectRepository.deleteById(code);
+    }
 }

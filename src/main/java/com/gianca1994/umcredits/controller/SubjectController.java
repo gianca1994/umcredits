@@ -35,4 +35,9 @@ public class SubjectController {
     public SubjectModel updateSubject(@RequestBody SubjectModel newSubject, @PathVariable Long id) {
         return this.subjectService.updateSubject(newSubject, id);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteSubject(@PathVariable Long id) {
+        this.subjectService.deleteSubject(id);
+    }
 }
