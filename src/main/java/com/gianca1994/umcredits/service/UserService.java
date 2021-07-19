@@ -1,10 +1,7 @@
 package com.gianca1994.umcredits.service;
 
-import com.gianca1994.umcredits.model.SubjectModel;
 import com.gianca1994.umcredits.model.UserModel;
 import com.gianca1994.umcredits.repository.UserRepository;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
