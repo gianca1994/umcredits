@@ -20,9 +20,7 @@ public class SubjectModel {
     @Column(nullable = false)
     private short year;
 
-
     public SubjectModel() {
-
     }
 
     public SubjectModel(Long code, String name, byte credits, short year) {

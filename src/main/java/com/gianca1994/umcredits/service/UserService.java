@@ -1,5 +1,6 @@
 package com.gianca1994.umcredits.service;
 
+import com.gianca1994.umcredits.model.SubjectModel;
 import com.gianca1994.umcredits.model.UserModel;
 import com.gianca1994.umcredits.repository.SubjectRepository;
 import com.gianca1994.umcredits.repository.UserRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,12 +25,10 @@ public class UserService {
     private SubjectRepository subjectRepository;
 
     public ArrayList<UserModel> getUsers() {
-
         return (ArrayList<UserModel>) this.userRepository.findAll();
     }
 
     public Optional<UserModel> getUser(Long id) {
-
         return userRepository.findById(id);
     }
 
@@ -85,10 +85,15 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public Optional<UserModel> addSubjectToUser(Long id, Long code) {
+    public void addSubjectToUser(Long id, Long code) {
 
-        return userRepository.findById(id).map(user -> {
-            return userRepository.save(user);
+        HashSet<SubjectModel> set = new HashSet<>();
+        set.add(subjectRepository.getById(code));
+
+        userRepository.findById(id).map(user -> {
+            user.setSubjects(set);
+            userRepository.save(user);
+            return null;
         });
     }
 }

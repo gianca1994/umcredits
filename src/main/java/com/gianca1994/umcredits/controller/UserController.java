@@ -14,6 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     private final Log log = LogFactory.getLog(getClass());
 
     @Autowired
@@ -64,7 +65,11 @@ public class UserController {
     }
 
     @PutMapping("/{id}/addsubject/{code}")
-    public Optional<UserModel> addSubjectToUser(@PathVariable Long id, @PathVariable Long code) {
-        return userService.addSubjectToUser(id, code);
+    public JSONObject addSubjectToUser(@PathVariable Long id, @PathVariable Long code) {
+        JSONObject userDeleteData = new JSONObject();
+
+        userService.addSubjectToUser(id, code);
+        userDeleteData.put("Response", "Matter with code: " + code + ", was assigned to the user with the ID: " + id);
+        return userDeleteData;
     }
 }

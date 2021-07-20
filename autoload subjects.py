@@ -53,5 +53,6 @@ list_subjects = [
     {"code": "2500", "name": "PRACTICA PROFESIONAL", "credits": "0", "year": "5"}
 ]
 
+
 print([requests.post(f'http://localhost:8080/subjects', json=i).status_code for i in list_subjects])
 
