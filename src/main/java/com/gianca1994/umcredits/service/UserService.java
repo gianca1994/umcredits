@@ -4,6 +4,7 @@ import com.gianca1994.umcredits.model.SubjectModel;
 import com.gianca1994.umcredits.model.UserModel;
 import com.gianca1994.umcredits.repository.SubjectRepository;
 import com.gianca1994.umcredits.repository.UserRepository;
+import org.apache.catalina.User;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,6 +60,9 @@ public class UserService {
             newUser.setPassword(encryptPassword(user.getPassword()));
             newUser.setFirstName(user.getFirstName());
             newUser.setLastName(user.getLastName());
+            newUser.setAverage(0);
+            newUser.setCredits((short) 0);
+            newUser.setSubjectsApproved((byte) 0);
 
             return userRepository.save(newUser);
         } else {
@@ -85,15 +90,26 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void addSubjectToUser(Long id, Long code) {
+    public void addSubjectToUser(Long id, Long code, byte note) {
 
-        HashSet<SubjectModel> set = new HashSet<>();
-        set.add(subjectRepository.getById(code));
+        Optional<UserModel> user = userRepository.findById(id);
+        SubjectModel subject = subjectRepository.getById(code);
+        UserModel oldUser = user.get();
 
-        userRepository.findById(id).map(user -> {
-            user.setSubjects(set);
-            userRepository.save(user);
-            return null;
-        });
+        oldUser.setCredits((short) (oldUser.getCredits() + subject.getCredits()));
+        oldUser.setSubjectsApproved((byte) (oldUser.getSubjectsApproved() + 1));
+
+        if (oldUser.getSubjectsApproved() > 1) {
+            oldUser.setAverage((oldUser.getAverage() + note) / 2);
+        } else {
+            oldUser.setAverage(note);
+        }
+
+        user.get().getSubjects().add(subjectRepository.getById(code));
+        user.get().setAverage(oldUser.getAverage());
+        user.get().setCredits(oldUser.getCredits());
+        user.get().setSubjectsApproved(oldUser.getSubjectsApproved());
+
+        userRepository.save(user.get());
     }
 }

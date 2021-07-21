@@ -15,7 +15,7 @@ public class SubjectModel {
     private String name;
 
     @Column(nullable = false)
-    private byte credits;
+    private short credits;
 
     @Column(nullable = false)
     private short year;
@@ -23,7 +23,7 @@ public class SubjectModel {
     public SubjectModel() {
     }
 
-    public SubjectModel(Long code, String name, byte credits, short year) {
+    public SubjectModel(Long code, String name, short credits, short year) {
         this.code = code;
         this.name = name;
         this.credits = credits;
@@ -46,7 +46,7 @@ public class SubjectModel {
         this.name = name;
     }
 
-    public byte getCredits() {
+    public short getCredits() {
         return credits;
     }
 

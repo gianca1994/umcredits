@@ -64,12 +64,19 @@ public class UserController {
         return userDeleteData;
     }
 
-    @PutMapping("/{id}/addsubject/{code}")
-    public JSONObject addSubjectToUser(@PathVariable Long id, @PathVariable Long code) {
+    @PutMapping("/{id}/addsubject/{code}/note/{note}")
+    public JSONObject addSubjectToUser(@PathVariable Long id,
+                                       @PathVariable Long code,
+                                       @PathVariable byte note) {
+
         JSONObject userDeleteData = new JSONObject();
 
-        userService.addSubjectToUser(id, code);
-        userDeleteData.put("Response", "Matter with code: " + code + ", was assigned to the user with the ID: " + id);
+        userService.addSubjectToUser(id, code, note);
+        userDeleteData.put("Response", "Matter with code: " + code +
+                ", was assigned to the user with the ID: " + id +
+                ", with the note: " + note
+        );
+
         return userDeleteData;
     }
 }
