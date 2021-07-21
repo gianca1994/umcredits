@@ -69,14 +69,16 @@ public class UserController {
                                        @PathVariable Long code,
                                        @PathVariable byte note) {
 
-        JSONObject userDeleteData = new JSONObject();
-
-        userService.addSubjectToUser(id, code, note);
-        userDeleteData.put("Response", "Matter with code: " + code +
-                ", was assigned to the user with the ID: " + id +
-                ", with the note: " + note
-        );
-
-        return userDeleteData;
+        JSONObject userData = new JSONObject();
+        if (note >= 6) {
+            userService.addSubjectToUser(id, code, note);
+            userData.put("Response", "Matter with code: " + code +
+                    ", was assigned to the user with the ID: " + id +
+                    ", with the note: " + note
+            );
+        } else {
+            userData.put("Response", "The minimum passing grade is 6");
+        }
+        return userData;
     }
 }
