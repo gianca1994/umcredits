@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/subjects")
+@RequestMapping("api/v1/subjects")
 public class SubjectController {
 
     @Autowired

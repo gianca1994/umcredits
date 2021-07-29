@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4ae69b5a-d02e-4a91-a07c-4ec2a6b638fe",
+		"_postman_id": "cba3ea4a-db32-4ece-9a4d-71fb937f7b91",
 		"name": "umcredits",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"juampigarci@gmail.com\",\r\n    \"password\": \"testeando\",\r\n    \"firstName\": \"juan pablo\",\r\n    \"lastName\": \"garcia\"\r\n}\r\n",
+							"raw": "{\r\n    \"email\": \"gianca@gmail.com\",\r\n    \"password\": \"hola123456\",\r\n    \"firstName\": \"giancarlo\",\r\n    \"lastName\": \"galvarini\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -23,13 +23,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users",
+							"raw": "http://localhost:8080/api/v1/users",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"users"
 							]
 						}
@@ -42,13 +44,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/users",
+							"raw": "http://localhost:8080/api/v1/users",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"users"
 							]
 						}
@@ -61,15 +65,17 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/users/7",
+							"raw": "http://localhost:8080/api/v1/users/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"users",
-								"7"
+								"1"
 							]
 						}
 					},
@@ -78,19 +84,45 @@
 				{
 					"name": "setSubject",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/users/1/subject/1",
+							"raw": "http://localhost:8080/api/v1/users/1/addsubject/1/note/10",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"users",
 								"1",
-								"subject",
+								"addsubject",
+								"1",
+								"note",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
 								"1"
 							]
 						}
@@ -117,13 +149,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/subjects",
+							"raw": "http://localhost:8080/api/v1/subjects",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"subjects"
 							]
 						}
@@ -136,13 +170,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/subjects",
+							"raw": "http://localhost:8080/api/v1/subjects",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"subjects"
 							]
 						}
@@ -155,13 +191,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/subjects/1",
+							"raw": "http://localhost:8080/api/v1/subjects/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"subjects",
 								"1"
 							]
@@ -184,15 +222,39 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/subjects/3",
+							"raw": "http://localhost:8080/api/v1/subjects/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"subjects",
 								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteSubject",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/subjects/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"subjects",
+								"1"
 							]
 						}
 					},
