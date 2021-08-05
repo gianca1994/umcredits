@@ -4,15 +4,11 @@ import com.gianca1994.umcredits.model.SubjectModel;
 import com.gianca1994.umcredits.model.UserModel;
 import com.gianca1994.umcredits.repository.SubjectRepository;
 import com.gianca1994.umcredits.repository.UserRepository;
-import org.apache.catalina.User;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

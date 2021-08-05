@@ -3,7 +3,6 @@ package com.gianca1994.umcredits.controller;
 import com.gianca1994.umcredits.model.AddSubjectToUser;
 import com.gianca1994.umcredits.model.UserModel;
 import com.gianca1994.umcredits.service.UserService;
-import net.minidev.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;

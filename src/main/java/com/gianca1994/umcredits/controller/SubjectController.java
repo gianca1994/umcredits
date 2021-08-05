@@ -3,7 +3,6 @@ package com.gianca1994.umcredits.controller;
 
 import com.gianca1994.umcredits.model.SubjectModel;
 import com.gianca1994.umcredits.service.SubjectService;
-import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
