@@ -5,6 +5,8 @@ import com.gianca1994.umcredits.model.SubjectModel;
 import com.gianca1994.umcredits.service.SubjectService;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -38,11 +40,9 @@ public class SubjectController {
     }
 
     @DeleteMapping("/{id}")
-    public JSONObject deleteSubject(@PathVariable Long id) {
-        JSONObject subjectDeleteData = new JSONObject();
+    public ResponseEntity<Object> deleteSubject(@PathVariable Long id) {
 
         this.subjectService.deleteSubject(id);
-        subjectDeleteData.put("Response", "Material code removed: " + id);
-        return subjectDeleteData;
+        return new ResponseEntity<>("Subject deleted correctly!", HttpStatus.OK);
     }
 }

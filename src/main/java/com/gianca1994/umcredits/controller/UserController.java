@@ -1,11 +1,14 @@
 package com.gianca1994.umcredits.controller;
 
+import com.gianca1994.umcredits.model.AddSubjectToUser;
 import com.gianca1994.umcredits.model.UserModel;
 import com.gianca1994.umcredits.service.UserService;
 import net.minidev.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -56,29 +59,20 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public JSONObject deleteUser(@PathVariable Long id) {
-        JSONObject userDeleteData = new JSONObject();
-
+    public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        userDeleteData.put("Response", "Deleted User ID: " + id);
-        return userDeleteData;
+        return new ResponseEntity<>("User deleted correctly!", HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/addsubject/{code}/note/{note}")
-    public JSONObject addSubjectToUser(@PathVariable Long id,
-                                       @PathVariable Long code,
-                                       @PathVariable byte note) {
+    @PutMapping("/{id}/addsubject/")
+    public ResponseEntity<Object> addSubjectToUser(@PathVariable Long id,
+                                       @RequestBody AddSubjectToUser addSubjectToUser) {
 
-        JSONObject userData = new JSONObject();
-        if (note >= 6) {
-            userService.addSubjectToUser(id, code, note);
-            userData.put("Response", "Matter with code: " + code +
-                    ", was assigned to the user with the ID: " + id +
-                    ", with the note: " + note
-            );
-        } else {
-            userData.put("Response", "The minimum passing grade is 6");
+        if (addSubjectToUser.getNote() >= 6) {
+            userService.addSubjectToUser(id, addSubjectToUser.getCode(), (byte) addSubjectToUser.getNote());
+            return new ResponseEntity<>("Subject successfully added to the user!", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("The grade must be higher than 6", HttpStatus.NOT_MODIFIED);
         }
-        return userData;
     }
 }

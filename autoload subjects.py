@@ -54,5 +54,5 @@ list_subjects = [
 ]
 
 
-print([requests.post(f'http://localhost:8080/subjects', json=i).status_code for i in list_subjects])
+print([requests.post(f'http://localhost:8080/api/v1/subjects', json=i).status_code for i in list_subjects])
 
