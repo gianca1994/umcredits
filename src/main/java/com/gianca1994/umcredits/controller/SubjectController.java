@@ -34,8 +34,9 @@ public class SubjectController {
     }
 
     @PutMapping("/{id}")
-    public SubjectModel updateSubject(@RequestBody SubjectModel newSubject, @PathVariable Long id) {
-        return this.subjectService.updateSubject(newSubject, id);
+    public ResponseEntity<Object> updateSubject(@RequestBody SubjectModel subject) {
+        this.subjectService.updateSubject(subject);
+        return new ResponseEntity<>("Subject updated correctly!", HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

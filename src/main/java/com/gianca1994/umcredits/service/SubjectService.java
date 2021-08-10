@@ -27,17 +27,8 @@ public class SubjectService {
         return this.subjectRepository.save(subject);
     }
 
-    public SubjectModel updateSubject(SubjectModel newSubject, Long code) {
-
-        return subjectRepository.findById(code).map(subject -> {
-            subject.setName(newSubject.getName());
-            return subjectRepository.save(subject);
-
-        }).orElseGet(() -> {
-
-            newSubject.setCode(code);
-            return subjectRepository.save(newSubject);
-        });
+    public void updateSubject(SubjectModel subject) {
+        subjectRepository.save(subject);
     }
 
     public void deleteSubject(Long code) {
