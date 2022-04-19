@@ -1,5 +1,6 @@
 package com.gianca1994.umcredits.service;
 
+import com.gianca1994.umcredits.jwt.JwtTokenUtil;
 import com.gianca1994.umcredits.model.Subject;
 import com.gianca1994.umcredits.model.User;
 import com.gianca1994.umcredits.repository.SubjectRepository;
@@ -7,10 +8,11 @@ import com.gianca1994.umcredits.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 @Service
@@ -22,48 +24,16 @@ public class UserService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public ArrayList<User> getUsers() {
-        return (ArrayList<User>) this.userRepository.findAll();
-    }
-
-    public Optional<User> getUser(Long id) {
-        return userRepository.findById(id);
-    }
-
-    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@"
-            + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
-
-    private boolean validateEmail(String email) {
-        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-
     private String encryptPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
 
-    public User saveUser(User user) {
+    public ArrayList<User> getUsers() {
+        return (ArrayList<User>) this.userRepository.findAll();
+    }
 
-        if (user.getPassword().length() < 8) {
-            return null;
-        }
-
-        if (validateEmail(user.getEmail())) {
-            User newUser = new User();
-
-            newUser.setEmail(user.getEmail());
-            newUser.setPassword(encryptPassword(user.getPassword()));
-            newUser.setFirstName(user.getFirstName());
-            newUser.setLastName(user.getLastName());
-            newUser.setAverage(0);
-            newUser.setCredits((short) 0);
-            newUser.setSubjectsApproved((byte) 0);
-
-            return userRepository.save(newUser);
-        } else {
-            return null;
-        }
+    public User getUser(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public User updateUser(User newUser, Long id) {

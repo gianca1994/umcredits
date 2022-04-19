@@ -1,5 +1,6 @@
 package com.gianca1994.umcredits.controller;
 
+import com.gianca1994.umcredits.jwt.JwtTokenUtil;
 import com.gianca1994.umcredits.model.AddSubjectToUser;
 import com.gianca1994.umcredits.model.User;
 import com.gianca1994.umcredits.service.UserService;
@@ -10,8 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -21,6 +23,23 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    private boolean userCorrespondToUserRequest(
+            String requestTokenHeader, String username){
+
+        String usernameRequest = null;
+        String jwtToken = null;
+
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+            jwtToken = requestTokenHeader.substring(7);
+            usernameRequest = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        }
+
+        return Objects.equals(usernameRequest, username);
+    }
 
     @GetMapping()
     public ArrayList<User> getUsers() {
@@ -32,20 +51,16 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{id}")
-    public Optional<User> getUser(@PathVariable Long id) {
+    @GetMapping("/{username}")
+    public Object getUser(HttpServletRequest request, @PathVariable String username) {
         try {
-            return this.userService.getUser(id);
-        } catch (Exception error) {
-            log.error(error);
-            return Optional.empty();
-        }
-    }
+            final String requestTokenHeader = request.getHeader("Authorization");
 
-    @PostMapping
-    public User saveUser(@RequestBody User user) {
-        try {
-            return this.userService.saveUser(user);
+            if (userCorrespondToUserRequest(requestTokenHeader, username)){
+                return userService.getUser(username);
+            }else{
+                return null;
+            }
         } catch (Exception error) {
             log.error(error);
             return null;
@@ -65,12 +80,12 @@ public class UserController {
 
     @PutMapping("/{username}/addsubject")
     public ResponseEntity<Object> addSubjectToUser(@PathVariable String username,
-                                       @RequestBody AddSubjectToUser addSubjectToUser) {
+                                                   @RequestBody AddSubjectToUser addSubjectToUser) {
 
         if (addSubjectToUser.getNote() >= 6) {
             userService.addSubjectToUser(username, addSubjectToUser.getCode(), (byte) addSubjectToUser.getNote());
             return new ResponseEntity<>("Subject successfully added to the user!", HttpStatus.OK);
-        }else{
+        } else {
             return new ResponseEntity<>("The grade must be higher than 6", HttpStatus.NOT_MODIFIED);
         }
     }
