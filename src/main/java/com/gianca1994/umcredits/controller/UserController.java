@@ -1,7 +1,7 @@
 package com.gianca1994.umcredits.controller;
 
 import com.gianca1994.umcredits.model.AddSubjectToUser;
-import com.gianca1994.umcredits.model.UserModel;
+import com.gianca1994.umcredits.model.User;
 import com.gianca1994.umcredits.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,7 +23,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping()
-    public ArrayList<UserModel> getUsers() {
+    public ArrayList<User> getUsers() {
         try {
             return userService.getUsers();
         } catch (Exception error) {
@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<UserModel> getUser(@PathVariable Long id) {
+    public Optional<User> getUser(@PathVariable Long id) {
         try {
             return this.userService.getUser(id);
         } catch (Exception error) {
@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserModel saveUser(@RequestBody UserModel user) {
+    public User saveUser(@RequestBody User user) {
         try {
             return this.userService.saveUser(user);
         } catch (Exception error) {
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserModel updateUser(@RequestBody UserModel newUser, @PathVariable Long id) {
+    public User updateUser(@RequestBody User newUser, @PathVariable Long id) {
         return userService.updateUser(newUser, id);
     }
 
@@ -63,12 +63,12 @@ public class UserController {
         return new ResponseEntity<>("User deleted correctly!", HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/addsubject/")
-    public ResponseEntity<Object> addSubjectToUser(@PathVariable Long id,
+    @PutMapping("/{username}/addsubject")
+    public ResponseEntity<Object> addSubjectToUser(@PathVariable String username,
                                        @RequestBody AddSubjectToUser addSubjectToUser) {
 
         if (addSubjectToUser.getNote() >= 6) {
-            userService.addSubjectToUser(id, addSubjectToUser.getCode(), (byte) addSubjectToUser.getNote());
+            userService.addSubjectToUser(username, addSubjectToUser.getCode(), (byte) addSubjectToUser.getNote());
             return new ResponseEntity<>("Subject successfully added to the user!", HttpStatus.OK);
         }else{
             return new ResponseEntity<>("The grade must be higher than 6", HttpStatus.NOT_MODIFIED);

@@ -1,7 +1,7 @@
 package com.gianca1994.umcredits.controller;
 
 
-import com.gianca1994.umcredits.model.SubjectModel;
+import com.gianca1994.umcredits.model.Subject;
 import com.gianca1994.umcredits.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,22 +19,22 @@ public class SubjectController {
     SubjectService subjectService;
 
     @GetMapping()
-    public ArrayList<SubjectModel> getSubjects() {
+    public ArrayList<Subject> getSubjects() {
         return subjectService.getSubjects();
     }
 
     @GetMapping("/{id}")
-    public Optional<SubjectModel> getSubject(@PathVariable Long id) {
+    public Optional<Subject> getSubject(@PathVariable Long id) {
         return this.subjectService.getSubject(id);
     }
 
     @PostMapping()
-    public SubjectModel saveSubject(@RequestBody SubjectModel subject) {
+    public Subject saveSubject(@RequestBody Subject subject) {
         return this.subjectService.saveSubject(subject);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateSubject(@RequestBody SubjectModel subject) {
+    public ResponseEntity<Object> updateSubject(@RequestBody Subject subject) {
         this.subjectService.updateSubject(subject);
         return new ResponseEntity<>("Subject updated correctly!", HttpStatus.OK);
     }

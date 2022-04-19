@@ -53,6 +53,8 @@ list_subjects = [
     {"code": "2500", "name": "PRACTICA PROFESIONAL", "credits": "0", "year": "5"}
 ]
 
+auth_token = ""
+hed = {'Authorization': 'Bearer ' + auth_token}
 
-print([requests.post(f'http://localhost:8080/api/v1/subjects', json=i).status_code for i in list_subjects])
+print([requests.post(f'http://localhost:8080/api/v1/subjects', json=i, headers=hed).status_code for i in list_subjects])
 

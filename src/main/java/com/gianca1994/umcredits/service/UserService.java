@@ -1,7 +1,7 @@
 package com.gianca1994.umcredits.service;
 
-import com.gianca1994.umcredits.model.SubjectModel;
-import com.gianca1994.umcredits.model.UserModel;
+import com.gianca1994.umcredits.model.Subject;
+import com.gianca1994.umcredits.model.User;
 import com.gianca1994.umcredits.repository.SubjectRepository;
 import com.gianca1994.umcredits.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
@@ -22,11 +22,11 @@ public class UserService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public ArrayList<UserModel> getUsers() {
-        return (ArrayList<UserModel>) this.userRepository.findAll();
+    public ArrayList<User> getUsers() {
+        return (ArrayList<User>) this.userRepository.findAll();
     }
 
-    public Optional<UserModel> getUser(Long id) {
+    public Optional<User> getUser(Long id) {
         return userRepository.findById(id);
     }
 
@@ -43,14 +43,14 @@ public class UserService {
         return BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
 
-    public UserModel saveUser(UserModel user) {
+    public User saveUser(User user) {
 
         if (user.getPassword().length() < 8) {
             return null;
         }
 
         if (validateEmail(user.getEmail())) {
-            UserModel newUser = new UserModel();
+            User newUser = new User();
 
             newUser.setEmail(user.getEmail());
             newUser.setPassword(encryptPassword(user.getPassword()));
@@ -66,7 +66,7 @@ public class UserService {
         }
     }
 
-    public UserModel updateUser(UserModel newUser, Long id) {
+    public User updateUser(User newUser, Long id) {
 
         return userRepository.findById(id).map(user -> {
             user.setEmail(newUser.getEmail());
@@ -86,11 +86,11 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void addSubjectToUser(Long id, Long code, byte note) {
+    public void addSubjectToUser(String username, Long code, byte note) {
 
-        Optional<UserModel> user = userRepository.findById(id);
-        SubjectModel subject = subjectRepository.getById(code);
-        UserModel oldUser = user.get();
+        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(username));
+        Subject subject = subjectRepository.getById(code);
+        User oldUser = user.get();
 
         oldUser.setCredits((short) (oldUser.getCredits() + subject.getCredits()));
         oldUser.setSubjectsApproved((byte) (oldUser.getSubjectsApproved() + 1));
