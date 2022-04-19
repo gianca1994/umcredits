@@ -28,7 +28,7 @@ public class UserController {
     private JwtTokenUtil jwtTokenUtil;
 
     private boolean userCorrespondToUserRequest(
-            String requestTokenHeader, String username){
+            String requestTokenHeader, String username) {
 
         String usernameRequest = null;
         String jwtToken = null;
@@ -39,6 +39,21 @@ public class UserController {
         }
 
         return Objects.equals(usernameRequest, username);
+    }
+
+    @GetMapping("me")
+    public Object myProfile(HttpServletRequest request) {
+
+        final String requestTokenHeader = request.getHeader("Authorization");
+        String usernameRequest = null;
+        String jwtToken = null;
+
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+            jwtToken = requestTokenHeader.substring(7);
+            usernameRequest = jwtTokenUtil.getUsernameFromToken(jwtToken);
+            return userService.getUser(usernameRequest);
+        }
+        return null;
     }
 
     @GetMapping()
@@ -56,9 +71,9 @@ public class UserController {
         try {
             final String requestTokenHeader = request.getHeader("Authorization");
 
-            if (userCorrespondToUserRequest(requestTokenHeader, username)){
+            if (userCorrespondToUserRequest(requestTokenHeader, username)) {
                 return userService.getUser(username);
-            }else{
+            } else {
                 return null;
             }
         } catch (Exception error) {
@@ -79,14 +94,26 @@ public class UserController {
     }
 
     @PutMapping("/{username}/addsubject")
-    public ResponseEntity<Object> addSubjectToUser(@PathVariable String username,
-                                                   @RequestBody AddSubjectToUser addSubjectToUser) {
+    public ResponseEntity<Object> addSubjectToUser(
+            HttpServletRequest request,
+            @PathVariable String username,
+            @RequestBody AddSubjectToUser addSubjectToUser) {
 
-        if (addSubjectToUser.getNote() >= 6) {
-            userService.addSubjectToUser(username, addSubjectToUser.getCode(), (byte) addSubjectToUser.getNote());
-            return new ResponseEntity<>("Subject successfully added to the user!", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("The grade must be higher than 6", HttpStatus.NOT_MODIFIED);
+        try {
+            final String requestTokenHeader = request.getHeader("Authorization");
+
+            if (userCorrespondToUserRequest(requestTokenHeader, username)) {
+                if (addSubjectToUser.getNote() >= 6) {
+                    userService.addSubjectToUser(username, addSubjectToUser.getCode(), (byte) addSubjectToUser.getNote());
+                    return new ResponseEntity<>("Subject successfully added to the user!", HttpStatus.OK);
+                }
+               return new ResponseEntity<>("The grade must be higher than 6", HttpStatus.NOT_MODIFIED);
+            }
+            return new ResponseEntity<>("It is not possible to add subjects to another user.", HttpStatus.BAD_REQUEST);
+        } catch (Exception error) {
+            log.error(error);
         }
+        return null;
     }
+
 }

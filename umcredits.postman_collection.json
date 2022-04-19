@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cba3ea4a-db32-4ece-9a4d-71fb937f7b91",
+		"_postman_id": "e6b527e5-bf6c-4105-b879-f7f5d52e6ccf",
 		"name": "umcredits",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -9,38 +9,18 @@
 			"name": "users",
 			"item": [
 				{
-					"name": "setUser",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"gianca@gmail.com\",\r\n    \"password\": \"hola123456\",\r\n    \"firstName\": \"giancarlo\",\r\n    \"lastName\": \"galvarini\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/users",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "getUsers",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -60,12 +40,22 @@
 					"response": []
 				},
 				{
-					"name": "getUserID",
+					"name": "getMyProfile",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/users/1",
+							"raw": "http://localhost:8080/api/v1/users/me",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -75,7 +65,7 @@
 								"api",
 								"v1",
 								"users",
-								"1"
+								"me"
 							]
 						}
 					},
@@ -84,10 +74,29 @@
 				{
 					"name": "setSubject",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"1\",\r\n    \"note\": \"7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/users/1/addsubject/1/note/10",
+							"raw": "http://localhost:8080/api/v1/users/test/addsubject",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -97,11 +106,8 @@
 								"api",
 								"v1",
 								"users",
-								"1",
-								"addsubject",
-								"1",
-								"note",
-								"10"
+								"test",
+								"addsubject"
 							]
 						}
 					},
@@ -110,6 +116,16 @@
 				{
 					"name": "deleteUser",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -137,6 +153,16 @@
 				{
 					"name": "setSubject",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -167,6 +193,16 @@
 				{
 					"name": "getSubject",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -188,10 +224,20 @@
 				{
 					"name": "getSubjectID",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/subjects/1",
+							"raw": "http://localhost:8080/api/v1/subjects/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -201,7 +247,7 @@
 								"api",
 								"v1",
 								"subjects",
-								"1"
+								"7"
 							]
 						}
 					},
@@ -210,6 +256,16 @@
 				{
 					"name": "updateSubject",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -241,6 +297,16 @@
 				{
 					"name": "deleteSubject",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -255,6 +321,73 @@
 								"v1",
 								"subjects",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"gianca\",\r\n    \"email\": \"gianca@gmail.com\",\r\n    \"password\": \"test\",\r\n    \"firstName\": \"test\",\r\n    \"lastName\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test\",\r\n    \"password\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
 							]
 						}
 					},
