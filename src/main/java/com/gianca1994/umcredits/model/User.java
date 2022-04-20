@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -51,4 +52,12 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "subject_code")}
     )
     private Set<Subject> subjects = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns
+            = @JoinColumn(name = "user_id",
+            referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id",
+                    referencedColumnName = "id"))
+    private List<Role> roles;
 }

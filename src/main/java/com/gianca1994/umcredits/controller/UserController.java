@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ public class UserController {
     private JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("me")
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public Object myProfile(@RequestHeader(value="Authorization") String token) {
 
         if (token != null && token.startsWith("Bearer ")) {
