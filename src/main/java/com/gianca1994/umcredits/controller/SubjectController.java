@@ -32,17 +32,4 @@ public class SubjectController {
     public Subject saveSubject(@RequestBody Subject subject) {
         return this.subjectService.saveSubject(subject);
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> updateSubject(@RequestBody Subject subject) {
-        this.subjectService.updateSubject(subject);
-        return new ResponseEntity<>("Subject updated correctly!", HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteSubject(@PathVariable Long id) {
-
-        this.subjectService.deleteSubject(id);
-        return new ResponseEntity<>("Subject deleted correctly!", HttpStatus.OK);
-    }
 }

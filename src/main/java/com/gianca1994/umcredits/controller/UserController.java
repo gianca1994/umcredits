@@ -27,61 +27,18 @@ public class UserController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    private boolean userCorrespondToUserRequest(
-            String requestTokenHeader, String username) {
-
-        String usernameRequest = null;
-        String jwtToken = null;
-
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7);
-            usernameRequest = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        }
-
-        return Objects.equals(usernameRequest, username);
-    }
-
     @GetMapping("me")
-    public Object myProfile(HttpServletRequest request) {
+    public Object myProfile(@RequestHeader(value="Authorization") String token) {
 
-        final String requestTokenHeader = request.getHeader("Authorization");
-        String usernameRequest = null;
-        String jwtToken = null;
-
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7);
-            usernameRequest = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwtToken = token.substring(7);
+            String usernameRequest = jwtTokenUtil.getUsernameFromToken(jwtToken);
             return userService.getUser(usernameRequest);
         }
         return null;
     }
 
-    @GetMapping()
-    public ArrayList<User> getUsers() {
-        try {
-            return userService.getUsers();
-        } catch (Exception error) {
-            log.error(error);
-            return null;
-        }
-    }
-
-    @GetMapping("/{username}")
-    public Object getUser(HttpServletRequest request, @PathVariable String username) {
-        try {
-            final String requestTokenHeader = request.getHeader("Authorization");
-
-            if (userCorrespondToUserRequest(requestTokenHeader, username)) {
-                return userService.getUser(username);
-            } else {
-                return null;
-            }
-        } catch (Exception error) {
-            log.error(error);
-            return null;
-        }
-    }
-
+    /*
     @PutMapping("/{id}")
     public User updateUser(@RequestBody User newUser, @PathVariable Long id) {
         return userService.updateUser(newUser, id);
@@ -115,5 +72,5 @@ public class UserController {
         }
         return null;
     }
-
+     */
 }

@@ -36,6 +36,7 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    /*
     public User updateUser(User newUser, Long id) {
 
         return userRepository.findById(id).map(user -> {
@@ -78,4 +79,6 @@ public class UserService {
 
         userRepository.save(user.get());
     }
+
+     */
 }
