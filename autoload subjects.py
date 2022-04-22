@@ -53,11 +53,10 @@ list_subjects = [
     {"code": "2500", "name": "PRACTICA PROFESIONAL", "credits": "0", "year": "5"}
 ]
 
-asd = []
-asde = 0
-for i in list_subjects:
-    asde +=1
-    print(f'subjectRepository.save(new Subject({asde}L, "{i["code"]}", "{i["name"]}", {i["credits"]}, {i["year"]}));')
+auth_token = ""
+hed = {'Authorization': 'Bearer ' + auth_token}
+
+print([requests.post(f'http://192.168.1.7:8080/api/v1/subjects', json=i, headers=hed).status_code for i in list_subjects])
 
 
 

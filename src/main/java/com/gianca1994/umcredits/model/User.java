@@ -23,7 +23,6 @@ public class User {
     private String username;
 
     @Column(nullable = false, unique = true, updatable = false)
-    @JsonIgnore
     private String email;
 
     @Column(nullable = false)

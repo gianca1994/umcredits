@@ -24,7 +24,7 @@ public class SubjectService {
     }
 
     public Subject saveSubject(Subject subject) {
-        return this.subjectRepository.save(subject);
+        return subjectRepository.save(subject);
     }
 
     public void updateSubject(Subject subject) {

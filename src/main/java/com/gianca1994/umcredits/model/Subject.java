@@ -1,6 +1,7 @@
 package com.gianca1994.umcredits.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,10 +15,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Subject {
 
-    @Id
+    @JsonIgnore
     @Column(unique = true, updatable = false)
     private Long id;
 
+    @Id
     @Column(nullable = false, unique = true)
     private String code;
 

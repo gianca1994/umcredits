@@ -4,14 +4,14 @@ package com.gianca1994.umcredits.controller;
 import com.gianca1994.umcredits.model.Subject;
 import com.gianca1994.umcredits.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("api/v1/subjects")
 public class SubjectController {
 
@@ -29,7 +29,8 @@ public class SubjectController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasAuthority('ADMIN_USER')")
     public Subject saveSubject(@RequestBody Subject subject) {
-        return this.subjectService.saveSubject(subject);
+        return subjectService.saveSubject(subject);
     }
 }

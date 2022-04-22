@@ -1,5 +1,7 @@
 package com.gianca1994.umcredits.service;
 
+import com.gianca1994.umcredits.dto.SubjectDTO;
+import com.gianca1994.umcredits.dto.UserDTO;
 import com.gianca1994.umcredits.jwt.JwtTokenUtil;
 import com.gianca1994.umcredits.model.Subject;
 import com.gianca1994.umcredits.model.User;
@@ -34,6 +36,26 @@ public class UserService {
 
     public User getUser(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public Object saveSubjectToUser(String username, SubjectDTO subject) {
+        User user = userRepository.findByUsername(username);
+        Subject subjectAdd = subjectRepository.getById(subject.getCode());
+
+        if (subject.getNote() >= 6){
+
+            user.setSubjectsApproved((byte) (user.getSubjectsApproved() + 1));
+            user.getSubjects().add(subjectAdd);
+            user.setCredits((short) (user.getCredits() + subjectAdd.getCredits()));
+
+            if (user.getSubjectsApproved() > 1) {
+                user.setAverage((user.getAverage() + subject.getNote()) / 2);
+            } else {
+                user.setAverage(subject.getNote());
+            }
+            return userRepository.save(user);
+        }
+        return null;
     }
 
     /*
