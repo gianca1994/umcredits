@@ -27,10 +27,6 @@ public class SubjectService {
         return subjectRepository.save(subject);
     }
 
-    public void updateSubject(Subject subject) {
-        subjectRepository.save(subject);
-    }
-
     public void deleteSubject(Long code) {
         this.subjectRepository.deleteById(code);
     }

@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import javax.persistence.*;
 
 @Entity
-@Table(name="role")
+@Table(name = "role")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="role_name")
+    @Column(name = "role_name")
     private String roleName;
 
     public Role() {

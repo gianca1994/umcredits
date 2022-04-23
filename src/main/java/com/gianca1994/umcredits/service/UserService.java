@@ -1,20 +1,14 @@
 package com.gianca1994.umcredits.service;
 
 import com.gianca1994.umcredits.dto.SubjectDTO;
-import com.gianca1994.umcredits.dto.UserDTO;
-import com.gianca1994.umcredits.jwt.JwtTokenUtil;
 import com.gianca1994.umcredits.model.Subject;
 import com.gianca1994.umcredits.model.User;
 import com.gianca1994.umcredits.repository.SubjectRepository;
 import com.gianca1994.umcredits.repository.UserRepository;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Optional;
 
 
 @Service
@@ -26,25 +20,31 @@ public class UserService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    private String encryptPassword(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt(12));
-    }
 
     public ArrayList<User> getUsers() {
         return (ArrayList<User>) this.userRepository.findAll();
     }
 
-    public User getUser(String username) {
+    public User getUserProfile(String username) {
         return userRepository.findByUsername(username);
     }
 
-    public Object saveSubjectToUser(String username, SubjectDTO subject) {
+    public void deleteUser(String username) {
         User user = userRepository.findByUsername(username);
-        Subject subjectAdd = subjectRepository.getById(subject.getCode());
+        userRepository.deleteById(user.getId());
+    }
 
-        if (subject.getNote() >= 6){
+    public User saveSubjectToUser(String username, SubjectDTO subject) throws Exception {
 
-            user.setSubjectsApproved((byte) (user.getSubjectsApproved() + 1));
+        User user = userRepository.findByUsername(username);
+        Subject subjectAdd = subjectRepository.findById(subject.getCode()).get();
+
+        for (Object subj : user.getSubjects()) {
+            if (subj == subjectAdd)
+                return user;
+        }
+
+        if (subject.getNote() >= 6) {
             user.getSubjects().add(subjectAdd);
             user.setCredits((short) (user.getCredits() + subjectAdd.getCredits()));
 
@@ -53,9 +53,10 @@ public class UserService {
             } else {
                 user.setAverage(subject.getNote());
             }
+            user.setSubjectsApproved((byte) (user.getSubjectsApproved() + 1));
             return userRepository.save(user);
         }
-        return null;
+        return user;
     }
 
     /*
@@ -74,33 +75,5 @@ public class UserService {
             return userRepository.save(newUser);
         });
     }
-
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
-    public void addSubjectToUser(String username, Long code, byte note) {
-
-        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(username));
-        Subject subject = subjectRepository.getById(code);
-        User oldUser = user.get();
-
-        oldUser.setCredits((short) (oldUser.getCredits() + subject.getCredits()));
-        oldUser.setSubjectsApproved((byte) (oldUser.getSubjectsApproved() + 1));
-
-        if (oldUser.getSubjectsApproved() > 1) {
-            oldUser.setAverage((oldUser.getAverage() + note) / 2);
-        } else {
-            oldUser.setAverage(note);
-        }
-
-        user.get().getSubjects().add(subjectRepository.getById(code));
-        user.get().setAverage(oldUser.getAverage());
-        user.get().setCredits(oldUser.getCredits());
-        user.get().setSubjectsApproved(oldUser.getSubjectsApproved());
-
-        userRepository.save(user.get());
-    }
-
      */
 }

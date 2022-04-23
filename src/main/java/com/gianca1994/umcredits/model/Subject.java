@@ -20,8 +20,8 @@ public class Subject {
     private Long id;
 
     @Id
-    @Column(nullable = false, unique = true)
-    private String code;
+    @Column(unique = true, updatable = false)
+    private Long code;
 
     @Column(nullable = false, unique = true)
     private String name;
