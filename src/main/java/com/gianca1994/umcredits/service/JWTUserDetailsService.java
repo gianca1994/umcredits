@@ -29,6 +29,9 @@ public class JWTUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
 
@@ -64,12 +67,15 @@ public class JWTUserDetailsService implements UserDetailsService {
         if (validateEmail(user.getEmail())) {
 
             User newUser = new User();
+            Role standardRole = roleRepository.findById(1L).get();
 
             newUser.setUsername(user.getUsername());
             newUser.setPassword(encryptPassword(user.getPassword()));
             newUser.setEmail(user.getEmail());
             newUser.setFirstName(user.getFirstName());
             newUser.setLastName(user.getLastName());
+
+            newUser.getRoles().add(standardRole);
 
             return userRepository.save(newUser);
         }

@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasAuthority('ADMIN_USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> getAllUsers(@RequestHeader(value = "Authorization") String token) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -46,9 +46,11 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN_USER')")
-    public ResponseEntity<Object> deleteUser(@RequestHeader(value = "Authorization") String token) {
+    @DeleteMapping()
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> deleteUser(
+            @RequestHeader(value = "Authorization") String token) {
+
         try {
             if (token != null && token.startsWith("Bearer ")) {
                 userService.deleteUser(getTokenUser(token));
@@ -65,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("me")
-    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
     public ResponseEntity<Object> myProfile(@RequestHeader(value = "Authorization") String token) {
 
         try {
@@ -86,7 +88,7 @@ public class UserController {
     }
 
     @PutMapping("approve")
-    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
     public ResponseEntity<Object> approveSubject(
             @RequestHeader(value = "Authorization") String token,
             @RequestBody SubjectDTO subject) {

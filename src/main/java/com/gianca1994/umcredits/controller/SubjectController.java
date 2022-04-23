@@ -19,17 +19,19 @@ public class SubjectController {
     SubjectService subjectService;
 
     @GetMapping()
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
     public ArrayList<Subject> getSubjects() {
         return subjectService.getSubjects();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
     public Optional<Subject> getSubject(@PathVariable Long id) {
         return this.subjectService.getSubject(id);
     }
 
     @PostMapping()
-    @PreAuthorize("hasAuthority('ADMIN_USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Subject saveSubject(@RequestBody Subject subject) {
         return subjectService.saveSubject(subject);
     }

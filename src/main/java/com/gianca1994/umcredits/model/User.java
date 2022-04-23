@@ -53,10 +53,10 @@ public class User {
     private Set<Subject> subjects = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns
-            = @JoinColumn(name = "user_id",
-            referencedColumnName = "id"),
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id",
+                    referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id",
                     referencedColumnName = "id"))
-    private List<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 }

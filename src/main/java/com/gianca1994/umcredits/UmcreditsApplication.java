@@ -1,15 +1,9 @@
 package com.gianca1994.umcredits;
 
-import com.gianca1994.umcredits.model.Role;
-import com.gianca1994.umcredits.model.Subject;
-import com.gianca1994.umcredits.repository.RoleRepository;
-import com.gianca1994.umcredits.repository.SubjectRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
@@ -24,15 +18,13 @@ public class UmcreditsApplication {
 
         log.info("UM-CREDITS API INICIALIZADA!!!");
 
+
+
     }
 }
 
 
 /*
-        RoleRepository roleRepository;
-
-        roleRepository.save(new Role(1L, "STANDARD_USER"));
-        roleRepository.save(new Role(2L, "ADMIN_USER"));
 
         SubjectRepository subjectRepository;
 
