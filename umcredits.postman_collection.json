@@ -9,37 +9,6 @@
 			"name": "users",
 			"item": [
 				{
-					"name": "getUsers",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/users",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "getMyProfile",
 					"request": {
 						"auth": {
@@ -47,7 +16,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaWFuY2EiLCJleHAiOjE2NTA3MzU4MzIsImlhdCI6MTY1MDczMjIzMn0._vo2r1bVEZTaMDfnLfUbfiuS3RrEbpBaoOhz3PveLESbKvpeRY37ikKo31zE2xxgKwu3JVdstz6q9KOc_P0ztg",
 									"type": "string"
 								}
 							]
@@ -55,10 +24,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/users/me",
+							"raw": "http://192.168.1.7:8080/api/v1/users/me",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"192",
+								"168",
+								"1",
+								"7"
 							],
 							"port": "8080",
 							"path": [
@@ -79,7 +51,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaWFuY2EiLCJleHAiOjE2NTA2OTk5ODYsImlhdCI6MTY1MDY5NjM4Nn0.HDSuRnnt663ZoNSOCBb0_iX_Vm5rhnwhSJOffBqR3OVwoB5NC256bnh6q3l3KSXtqk_6xaD9eOm4uCwriospXg",
 									"type": "string"
 								}
 							]
@@ -88,7 +60,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"code\": \"1\",\r\n    \"note\": \"7\"\r\n}",
+							"raw": "{\r\n    \"code\": \"5\",\r\n    \"note\": \"9\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -96,23 +68,104 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/users/test/addsubject",
+							"raw": "http://192.168.1.7:8080/api/v1/users/approve",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"192",
+								"168",
+								"1",
+								"7"
 							],
 							"port": "8080",
 							"path": [
 								"api",
 								"v1",
 								"users",
-								"test",
-								"addsubject"
+								"approve"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "subjects",
+			"item": [
+				{
+					"name": "getSubject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaWFuY2EiLCJleHAiOjE2NTA2OTk5ODYsImlhdCI6MTY1MDY5NjM4Nn0.HDSuRnnt663ZoNSOCBb0_iX_Vm5rhnwhSJOffBqR3OVwoB5NC256bnh6q3l3KSXtqk_6xaD9eOm4uCwriospXg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.1.7:8080/api/v1/subjects",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"7"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"subjects"
 							]
 						}
 					},
 					"response": []
 				},
+				{
+					"name": "getSubjectID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaWFuY2EiLCJleHAiOjE2NTA2OTk5ODYsImlhdCI6MTY1MDY5NjM4Nn0.HDSuRnnt663ZoNSOCBb0_iX_Vm5rhnwhSJOffBqR3OVwoB5NC256bnh6q3l3KSXtqk_6xaD9eOm4uCwriospXg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.1.7:8080/api/v1/subjects/7",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"7"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"subjects",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AdminRequests",
+			"item": [
 				{
 					"name": "deleteUser",
 					"request": {
@@ -140,155 +193,6 @@
 								"v1",
 								"users",
 								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "subjects",
-			"item": [
-				{
-					"name": "setSubject",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"code\": \"0001\",\r\n    \"name\": \"TECNOLOGIA CIENCIA Y SOCIEDAD\",\r\n    \"credits\": \"3\", \r\n    \"year\": \"1\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/subjects",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"subjects"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "getSubject",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/subjects",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"subjects"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "getSubjectID",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/subjects/7",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"subjects",
-								"7"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "updateSubject",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"code\": \"100\",\r\n    \"name\": \"asdasdasdasd\",\r\n    \"credits\": \"31\", \r\n    \"year\": \"123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/subjects/3",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"subjects",
-								"3"
 							]
 						}
 					},
@@ -325,6 +229,83 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "setSubject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaWFuY2EiLCJleHAiOjE2NTA3MzM5ODEsImlhdCI6MTY1MDczMDM4MX0.-oLLSMmfp5xsaMBE1qiI4_VU1nNroTB9Kznb5smrob8gM9XrMoHbWgZmwJmzRQ-bbpfpCf9wF6Vsnnf3GIhVmQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"0001\",\r\n    \"name\": \"TECNOLOGIA CIENCIA Y SOCIEDAD\",\r\n    \"credits\": \"3\", \r\n    \"year\": \"1\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://192.168.1.7:8080/api/v1/subjects",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"7"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"subjects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaWFuY2EiLCJleHAiOjE2NTA3MzU4MzIsImlhdCI6MTY1MDczMjIzMn0._vo2r1bVEZTaMDfnLfUbfiuS3RrEbpBaoOhz3PveLESbKvpeRY37ikKo31zE2xxgKwu3JVdstz6q9KOc_P0ztg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.1.7:8080/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"7"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -338,7 +319,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"gianca\",\r\n    \"email\": \"gianca@gmail.com\",\r\n    \"password\": \"test\",\r\n    \"firstName\": \"test\",\r\n    \"lastName\": \"test\"\r\n}",
+							"raw": "{\r\n    \"username\": \"gianca\",\r\n    \"email\": \"luciano@gmail.com\",\r\n    \"password\": \"test\",\r\n    \"firstName\": \"Luciano\",\r\n    \"lastName\": \"Galvarini\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -346,10 +327,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/auth/register",
+							"raw": "http://192.168.1.7:8080/api/v1/auth/register",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"192",
+								"168",
+								"1",
+								"7"
 							],
 							"port": "8080",
 							"path": [
@@ -369,7 +353,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"test\",\r\n    \"password\": \"test\"\r\n}",
+							"raw": "{\r\n    \"username\": \"gianca\",\r\n    \"password\": \"test\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -377,10 +361,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/auth/login",
+							"raw": "http://192.168.1.7:8080/api/v1/auth/login",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"192",
+								"168",
+								"1",
+								"7"
 							],
 							"port": "8080",
 							"path": [

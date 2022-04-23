@@ -1,8 +1,10 @@
 package com.gianca1994.umcredits.service;
 
 import com.gianca1994.umcredits.dto.SubjectDTO;
+import com.gianca1994.umcredits.model.Role;
 import com.gianca1994.umcredits.model.Subject;
 import com.gianca1994.umcredits.model.User;
+import com.gianca1994.umcredits.repository.RoleRepository;
 import com.gianca1994.umcredits.repository.SubjectRepository;
 import com.gianca1994.umcredits.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class UserService {
     @Autowired
     private SubjectRepository subjectRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
 
     public ArrayList<User> getUsers() {
         return (ArrayList<User>) this.userRepository.findAll();
@@ -57,6 +61,15 @@ public class UserService {
             return userRepository.save(user);
         }
         return user;
+    }
+
+    public Object setAdminToIdUser(Long id) {
+        User user = userRepository.getById(id);
+        Role adminRole = roleRepository.findById(2L).get();
+
+        user.getRoles().add(adminRole);
+
+        return userRepository.save(user);
     }
 
     /*

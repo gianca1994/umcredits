@@ -112,6 +112,29 @@ public class UserController {
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
         }
     }
+
+    @GetMapping("setadmin/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> addRoleToUser(
+            @RequestHeader(value = "Authorization") String token,
+            @RequestParam Long id) {
+
+        try {
+            if (token != null && token.startsWith("Bearer ")) {
+                return new ResponseEntity<>(
+                        userService.setAdminToIdUser(id),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        "The token is required to perform this action.",
+                        HttpStatus.NO_CONTENT
+                );
+            }
+        } catch (Exception error) {
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+        }
+    }
 }
 
     /*
