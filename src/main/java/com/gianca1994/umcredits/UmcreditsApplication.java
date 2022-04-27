@@ -10,8 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 @SpringBootApplication
 public class UmcreditsApplication {
-
-
     public static void main(String[] args) {
 
         Log log = LogFactory.getLog(UmcreditsApplication.class);
@@ -19,6 +17,7 @@ public class UmcreditsApplication {
         SpringApplication.run(UmcreditsApplication.class, args);
 
         log.info("UM-CREDITS API INICIALIZADA!!!");
+
 
     }
 }

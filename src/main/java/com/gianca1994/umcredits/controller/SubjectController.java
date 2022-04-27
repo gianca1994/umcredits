@@ -1,17 +1,17 @@
 package com.gianca1994.umcredits.controller;
 
 
-import com.gianca1994.umcredits.model.SubjectModel;
+import com.gianca1994.umcredits.model.Subject;
 import com.gianca1994.umcredits.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("api/v1/subjects")
 public class SubjectController {
 
@@ -19,30 +19,20 @@ public class SubjectController {
     SubjectService subjectService;
 
     @GetMapping()
-    public ArrayList<SubjectModel> getSubjects() {
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    public ArrayList<Subject> getSubjects() {
         return subjectService.getSubjects();
     }
 
     @GetMapping("/{id}")
-    public Optional<SubjectModel> getSubject(@PathVariable Long id) {
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    public Optional<Subject> getSubject(@PathVariable Long id) {
         return this.subjectService.getSubject(id);
     }
 
     @PostMapping()
-    public SubjectModel saveSubject(@RequestBody SubjectModel subject) {
-        return this.subjectService.saveSubject(subject);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> updateSubject(@RequestBody SubjectModel subject) {
-        this.subjectService.updateSubject(subject);
-        return new ResponseEntity<>("Subject updated correctly!", HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteSubject(@PathVariable Long id) {
-
-        this.subjectService.deleteSubject(id);
-        return new ResponseEntity<>("Subject deleted correctly!", HttpStatus.OK);
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Subject saveSubject(@RequestBody Subject subject) {
+        return subjectService.saveSubject(subject);
     }
 }

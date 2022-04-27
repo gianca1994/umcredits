@@ -1,77 +1,146 @@
 package com.gianca1994.umcredits.controller;
 
-import com.gianca1994.umcredits.model.AddSubjectToUser;
-import com.gianca1994.umcredits.model.UserModel;
+import com.gianca1994.umcredits.dto.SubjectDTO;
+import com.gianca1994.umcredits.jwt.JwtTokenUtil;
 import com.gianca1994.umcredits.service.UserService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("api/v1/users")
 public class UserController {
-
-    private final Log log = LogFactory.getLog(getClass());
 
     @Autowired
     UserService userService;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    private String getTokenUser(String token) {
+        String jwtToken = token.substring(7);
+        return jwtTokenUtil.getUsernameFromToken(jwtToken);
+    }
+
     @GetMapping()
-    public ArrayList<UserModel> getUsers() {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> getAllUsers(@RequestHeader(value = "Authorization") String token) {
         try {
-            return userService.getUsers();
+            if (token != null && token.startsWith("Bearer ")) {
+                return new ResponseEntity<>(
+                        userService.getUsers(),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        "The token is required to perform this action.",
+                        HttpStatus.NO_CONTENT
+                );
+            }
         } catch (Exception error) {
-            log.error(error);
-            return null;
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
         }
     }
 
-    @GetMapping("/{id}")
-    public Optional<UserModel> getUser(@PathVariable Long id) {
+    @DeleteMapping()
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> deleteUser(
+            @RequestHeader(value = "Authorization") String token) {
+
         try {
-            return this.userService.getUser(id);
+            if (token != null && token.startsWith("Bearer ")) {
+                userService.deleteUser(getTokenUser(token));
+                return new ResponseEntity<>("User deleted correctly!", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(
+                        "The token is required to perform this action.",
+                        HttpStatus.NO_CONTENT
+                );
+            }
         } catch (Exception error) {
-            log.error(error);
-            return Optional.empty();
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
         }
     }
 
-    @PostMapping
-    public UserModel saveUser(@RequestBody UserModel user) {
+    @GetMapping("me")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    public ResponseEntity<Object> myProfile(@RequestHeader(value = "Authorization") String token) {
+
         try {
-            return this.userService.saveUser(user);
+            if (token != null && token.startsWith("Bearer ")) {
+                return new ResponseEntity<>(
+                        userService.getUserProfile(getTokenUser(token)),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        "The token is required to perform this action.",
+                        HttpStatus.NO_CONTENT
+                );
+            }
         } catch (Exception error) {
-            log.error(error);
-            return null;
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
         }
     }
 
-    @PutMapping("/{id}")
-    public UserModel updateUser(@RequestBody UserModel newUser, @PathVariable Long id) {
-        return userService.updateUser(newUser, id);
+    @PutMapping("approve")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    public ResponseEntity<Object> approveSubject(
+            @RequestHeader(value = "Authorization") String token,
+            @RequestBody SubjectDTO subject) {
+
+        try {
+            if (token != null && token.startsWith("Bearer ")) {
+
+                return new ResponseEntity<>(
+                        userService.saveSubjectToUser(
+                                getTokenUser(token),
+                                subject
+                        ),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        "The token is required to perform this action.",
+                        HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception error) {
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return new ResponseEntity<>("User deleted correctly!", HttpStatus.OK);
-    }
+    @GetMapping("setadmin/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> addRoleToUser(
+            @RequestHeader(value = "Authorization") String token,
+            @RequestParam Long id) {
 
-    @PutMapping("/{id}/addsubject/")
-    public ResponseEntity<Object> addSubjectToUser(@PathVariable Long id,
-                                       @RequestBody AddSubjectToUser addSubjectToUser) {
-
-        if (addSubjectToUser.getNote() >= 6) {
-            userService.addSubjectToUser(id, addSubjectToUser.getCode(), (byte) addSubjectToUser.getNote());
-            return new ResponseEntity<>("Subject successfully added to the user!", HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>("The grade must be higher than 6", HttpStatus.NOT_MODIFIED);
+        try {
+            if (token != null && token.startsWith("Bearer ")) {
+                return new ResponseEntity<>(
+                        userService.setAdminToIdUser(id),
+                        HttpStatus.OK
+                );
+            } else {
+                return new ResponseEntity<>(
+                        "The token is required to perform this action.",
+                        HttpStatus.NO_CONTENT
+                );
+            }
+        } catch (Exception error) {
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
         }
     }
 }
+
+    /*
+    @PutMapping("/{id}")
+    public User updateUser(@RequestBody User newUser, @PathVariable Long id) {
+        return userService.updateUser(newUser, id);
+    }
+
+     */
