@@ -1,0 +1,72 @@
+{
+   "Routes": {
+      "Auth": {
+         "Register": {
+            "URL": "https://umcredits-api.herokuapp.com/api/v1/auth/register",
+            "METHOD": "POST",
+            "ALLOWED_ROLES": "ALL"
+         },
+         "Login": {
+            "URL": "https://umcredits-api.herokuapp.com/api/v1/auth/login",
+            "METHOD": "POST",
+            "ALLOWED_ROLES": "ALL"
+         }
+      },
+      "Users": {
+         "Profile": {
+            "URL": "https://umcredits-api.herokuapp.com/api/v1/users/me",
+            "METHOD": "GET",
+            "ALLOWED_ROLES": [
+               "STANDARD",
+               "ADMIN"
+            ]
+         },
+         "GET All Users": {
+            "URL": "https://umcredits-api.herokuapp.com/api/v1/users",
+            "METHOD": "GET",
+            "ALLOWED_ROLES": "ADMIN"
+         },
+         "DELETE User": {
+            "URL": "https://umcredits-api.herokuapp.com/api/v1/users",
+            "METHOD": "DELETE",
+            "ALLOWED_ROLES": "ADMIN"
+         },
+         "APPROVE Subject": {
+            "URL": "https://umcredits-api.herokuapp.com/api/v1/users/approve",
+            "METHOD": "PUT",
+            "ALLOWED_ROLES": [
+               "STANDARD",
+               "ADMIN"
+            ]
+         },
+         "ADD Role to User": {
+            "URL": "https://umcredits-api.herokuapp.com/api/v1/users/setadmin/{id}",
+            "METHOD": "PUT",
+            "ALLOWED_ROLES": "ADMIN"
+         }
+      },
+      "Subjects": {
+         "GET All Subjects": {
+            "URL": "https://umcredits-api.herokuapp.com/api/v1/subjects",
+            "METHOD": "GET",
+            "ALLOWED_ROLES": [
+               "STANDARD",
+               "ADMIN"
+            ]
+         },
+         "GET One Subject": {
+            "URL": "https://umcredits-api.herokuapp.com/api/v1/subjects/{id}",
+            "METHOD": "GET",
+            "ALLOWED_ROLES": [
+               "STANDARD",
+               "ADMIN"
+            ]
+         },
+         "SAVE Subject": {
+            "URL": "https://umcredits-api.herokuapp.com/api/v1/subjects",
+            "METHOD": "POST",
+            "ALLOWED_ROLES": "ADMIN"
+         }
+      }
+   }
+}

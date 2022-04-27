@@ -113,7 +113,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("setadmin/{id}")
+    @PutMapping("setadmin/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> addRoleToUser(
             @RequestHeader(value = "Authorization") String token,
