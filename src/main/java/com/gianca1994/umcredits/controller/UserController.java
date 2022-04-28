@@ -2,6 +2,7 @@ package com.gianca1994.umcredits.controller;
 
 import com.gianca1994.umcredits.dto.SubjectDTO;
 import com.gianca1994.umcredits.jwt.JwtTokenUtil;
+import com.gianca1994.umcredits.model.User;
 import com.gianca1994.umcredits.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -95,14 +96,14 @@ public class UserController {
 
         try {
             if (token != null && token.startsWith("Bearer ")) {
-
-                return new ResponseEntity<>(
-                        userService.saveSubjectToUser(
-                                getTokenUser(token),
-                                subject
-                        ),
-                        HttpStatus.OK
+                User user = userService.saveSubjectToUser(
+                        getTokenUser(token),
+                        subject
                 );
+                if(user.getSubjectsApproved() > 0)
+                    user.setAverage(user.getAverage() / user.getSubjectsApproved());
+
+                return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(
                         "The token is required to perform this action.",

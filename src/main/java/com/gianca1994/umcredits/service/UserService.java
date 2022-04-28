@@ -30,7 +30,10 @@ public class UserService {
     }
 
     public User getUserProfile(String username) {
-        return userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
+        if (user.getSubjectsApproved() > 0)
+            user.setAverage(user.getAverage() / user.getSubjectsApproved());
+        return user;
     }
 
     public void deleteUser(String username) {
@@ -52,12 +55,10 @@ public class UserService {
             user.getSubjects().add(subjectAdd);
             user.setCredits((short) (user.getCredits() + subjectAdd.getCredits()));
 
-            if (user.getSubjectsApproved() > 1) {
-                user.setAverage((user.getAverage() + subject.getNote()) / 2);
-            } else {
-                user.setAverage(subject.getNote());
-            }
+            user.setAverage(user.getAverage() + (float) subject.getNote());
+
             user.setSubjectsApproved((byte) (user.getSubjectsApproved() + 1));
+
             return userRepository.save(user);
         }
         return user;
@@ -71,6 +72,7 @@ public class UserService {
 
         return userRepository.save(user);
     }
+
 
     /*
     public User updateUser(User newUser, Long id) {
