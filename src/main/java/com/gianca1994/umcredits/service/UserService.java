@@ -52,11 +52,10 @@ public class UserService {
         }
 
         if (subject.getNote() >= 6) {
+
             user.getSubjects().add(subjectAdd);
             user.setCredits((short) (user.getCredits() + subjectAdd.getCredits()));
-
             user.setAverage(user.getAverage() + (float) subject.getNote());
-
             user.setSubjectsApproved((byte) (user.getSubjectsApproved() + 1));
 
             return userRepository.save(user);
@@ -71,6 +70,19 @@ public class UserService {
         user.getRoles().add(adminRole);
 
         return userRepository.save(user);
+    }
+
+    public void deleteSubjectToUser(String username, Long code) {
+        User user = userRepository.findByUsername(username);
+        Subject subject = subjectRepository.findById(code).get();
+
+        user.setAverage(user.getAverage());
+
+        user.setCredits((short) (user.getCredits() - subject.getCredits()));
+        user.setSubjectsApproved((byte) (user.getSubjectsApproved() - 1));
+
+        user.getSubjects().remove(subject);
+        userRepository.save(user);
     }
 
 

@@ -16,8 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "*", methods= RequestMethod.POST)
 public class AuthController {
 
     @Autowired

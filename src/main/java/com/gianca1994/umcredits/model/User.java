@@ -1,11 +1,13 @@
 package com.gianca1994.umcredits.model;
 
+import antlr.collections.List;
+import com.gianca1994.umcredits.dto.SubjectDTO;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -59,4 +61,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id",
                     referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
+
+
 }

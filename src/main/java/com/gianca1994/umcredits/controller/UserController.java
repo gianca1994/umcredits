@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE})
 @RequestMapping("api/v1/users")
 public class UserController {
 
@@ -100,7 +100,7 @@ public class UserController {
                         getTokenUser(token),
                         subject
                 );
-                if(user.getSubjectsApproved() > 0)
+                if (user.getSubjectsApproved() > 0)
                     user.setAverage(user.getAverage() / user.getSubjectsApproved());
 
                 return new ResponseEntity<>(user, HttpStatus.OK);
@@ -136,6 +136,19 @@ public class UserController {
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
         }
     }
+
+    @DeleteMapping("deletesubject/{code}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    public void deleteSubjectToUser(
+            @RequestHeader(value = "Authorization") String token,
+            @PathVariable Long code) {
+
+        if (token != null && token.startsWith("Bearer ")) {
+            userService.deleteSubjectToUser(getTokenUser(token), code);
+        }
+    }
+
+
 }
 
     /*
