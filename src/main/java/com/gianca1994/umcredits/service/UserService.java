@@ -41,7 +41,7 @@ public class UserService {
         userRepository.deleteById(user.getId());
     }
 
-    public User saveSubjectToUser(String username, SubjectDTO subject) throws Exception {
+    public User saveSubjectToUser(String username, SubjectDTO subject) {
 
         User user = userRepository.findByUsername(username);
         Subject subjectAdd = subjectRepository.findById(subject.getCode()).get();
@@ -57,6 +57,7 @@ public class UserService {
             user.setCredits((short) (user.getCredits() + subjectAdd.getCredits()));
             user.setAverage(user.getAverage() + (float) subject.getNote());
             user.setSubjectsApproved((byte) (user.getSubjectsApproved() + 1));
+            user.setRemainingSubjects((byte) (user.getRemainingSubjects() - 1));
 
             return userRepository.save(user);
         }
@@ -66,12 +67,14 @@ public class UserService {
     public Object setAdminToIdUser(Long id) {
         User user = userRepository.getById(id);
         Role adminRole = roleRepository.findById(2L).get();
+        Role standardRole = roleRepository.findById(1L).get();
 
+        user.getRoles().remove(standardRole);
         user.getRoles().add(adminRole);
 
         return userRepository.save(user);
     }
-
+    /*
     public void deleteSubjectToUser(String username, Long code) {
         User user = userRepository.findByUsername(username);
         Subject subject = subjectRepository.findById(code).get();
@@ -84,7 +87,7 @@ public class UserService {
         user.getSubjects().remove(subject);
         userRepository.save(user);
     }
-
+    */
 
     /*
     public User updateUser(User newUser, Long id) {

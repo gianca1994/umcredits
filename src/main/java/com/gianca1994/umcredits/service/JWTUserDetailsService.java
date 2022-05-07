@@ -74,6 +74,7 @@ public class JWTUserDetailsService implements UserDetailsService {
             newUser.setEmail(user.getEmail());
             newUser.setFirstName(user.getFirstName());
             newUser.setLastName(user.getLastName());
+            newUser.setRemainingSubjects((byte) 50);
 
             newUser.getRoles().add(standardRole);
 

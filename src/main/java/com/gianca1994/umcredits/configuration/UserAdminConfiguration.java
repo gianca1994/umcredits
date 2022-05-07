@@ -21,8 +21,8 @@ public class UserAdminConfiguration {
             userAdmin.setFirstName("Giancarlo");
             userAdmin.setLastName("Galvarini Hauser");
             userAdmin.setPassword(BCrypt.hashpw("test", BCrypt.gensalt(12)));
-            userAdmin.getRoles().add(roleRepository.findById(1L).get());
             userAdmin.getRoles().add(roleRepository.findById(2L).get());
+            userAdmin.setRemainingSubjects((byte) 50);
             userRepository.save(userAdmin);
         };
     }

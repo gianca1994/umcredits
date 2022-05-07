@@ -69,7 +69,8 @@ public class UserController {
 
     @GetMapping("me")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
-    public ResponseEntity<Object> myProfile(@RequestHeader(value = "Authorization") String token) {
+    public ResponseEntity<Object> myProfile(
+            @RequestHeader(value = "Authorization") String token) {
 
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -118,7 +119,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> addRoleToUser(
             @RequestHeader(value = "Authorization") String token,
-            @RequestParam Long id) {
+            @PathVariable Long id) {
 
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -136,7 +137,10 @@ public class UserController {
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
         }
     }
+}
 
+
+    /*
     @DeleteMapping("deletesubject/{code}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
     public void deleteSubjectToUser(
@@ -148,10 +152,6 @@ public class UserController {
         }
     }
 
-
-}
-
-    /*
     @PutMapping("/{id}")
     public User updateUser(@RequestBody User newUser, @PathVariable Long id) {
         return userService.updateUser(newUser, id);

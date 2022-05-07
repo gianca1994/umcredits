@@ -46,6 +46,9 @@ public class User {
     @Column()
     private byte subjectsApproved;
 
+    @Column()
+    private byte remainingSubjects;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_subjects",
