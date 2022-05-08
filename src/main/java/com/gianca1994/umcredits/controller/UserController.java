@@ -3,6 +3,7 @@ package com.gianca1994.umcredits.controller;
 import com.gianca1994.umcredits.dto.SubjectDTO;
 import com.gianca1994.umcredits.jwt.JwtTokenUtil;
 import com.gianca1994.umcredits.model.User;
+import com.gianca1994.umcredits.repository.SubjectRepository;
 import com.gianca1994.umcredits.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,7 +72,6 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
     public ResponseEntity<Object> myProfile(
             @RequestHeader(value = "Authorization") String token) {
-
         try {
             if (token != null && token.startsWith("Bearer ")) {
                 return new ResponseEntity<>(

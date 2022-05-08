@@ -41,6 +41,21 @@ public class UserService {
         userRepository.deleteById(user.getId());
     }
 
+    public byte yearEligibilityCalculate(short credits) {
+        byte yearEligibility = 1;
+
+        if (credits >= 130) {
+            yearEligibility = 5;
+        } else if (credits >= 90) {
+            yearEligibility = 4;
+        } else if (credits >= 38) {
+            yearEligibility = 3;
+        } else if (credits >= 12) {
+            yearEligibility = 2;
+        }
+        return yearEligibility;
+    }
+
     public User saveSubjectToUser(String username, SubjectDTO subject) {
 
         User user = userRepository.findByUsername(username);
@@ -58,6 +73,7 @@ public class UserService {
             user.setAverage(user.getAverage() + (float) subject.getNote());
             user.setSubjectsApproved((byte) (user.getSubjectsApproved() + 1));
             user.setRemainingSubjects((byte) (user.getRemainingSubjects() - 1));
+            user.setYearEligibility(yearEligibilityCalculate(user.getCredits()));
 
             return userRepository.save(user);
         }
