@@ -28,4 +28,7 @@ public class Subject {
     @Column(nullable = false)
     private int year;
 
+    @Column()
+    private byte note;
+
 }

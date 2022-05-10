@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -31,8 +34,14 @@ public class UserService {
 
     public User getUserProfile(String username) {
         User user = userRepository.findByUsername(username);
+        float average = 0;
+
+        for (Subject b : user.getSubjects()) {
+            average += b.getNote();
+        }
+
         if (user.getSubjectsApproved() > 0)
-            user.setAverage(user.getAverage() / user.getSubjectsApproved());
+            user.setAverage(average / user.getSubjectsApproved());
         return user;
     }
 
@@ -67,21 +76,35 @@ public class UserService {
         }
 
         if (subject.getNote() >= 6) {
-
+            subjectAdd.setNote(subject.getNote());
             user.getSubjects().add(subjectAdd);
             user.setCredits((short) (user.getCredits() + subjectAdd.getCredits()));
-            user.setAverage(user.getAverage() + (float) subject.getNote());
             user.setSubjectsApproved((byte) (user.getSubjectsApproved() + 1));
             user.setRemainingSubjects((byte) (user.getRemainingSubjects() - 1));
             user.setYearEligibility(yearEligibilityCalculate(user.getCredits()));
+            user.setAverage(user.getAverage() + subjectAdd.getNote());
 
             return userRepository.save(user);
         }
         return user;
     }
 
-    public Object setAdminToIdUser(Long id) {
-        User user = userRepository.getById(id);
+    public User deleteSubjectToUser(String username, Long code) {
+        User user = userRepository.findByUsername(username);
+        Subject subject = subjectRepository.findById(code).get();
+
+        user.setAverage(user.getAverage() - subject.getNote());
+        user.setCredits((short) (user.getCredits() - subject.getCredits()));
+        user.setSubjectsApproved((byte) (user.getSubjectsApproved() - 1));
+        user.setRemainingSubjects((byte) (user.getRemainingSubjects() + 1));
+
+        user.getSubjects().remove(subject);
+        userRepository.save(user);
+        return user;
+    }
+
+    public Object setAdminToIdUser(String adminUserName) {
+        User user = userRepository.findByUsername(adminUserName);
         Role adminRole = roleRepository.findById(2L).get();
         Role standardRole = roleRepository.findById(1L).get();
 
@@ -90,20 +113,6 @@ public class UserService {
 
         return userRepository.save(user);
     }
-    /*
-    public void deleteSubjectToUser(String username, Long code) {
-        User user = userRepository.findByUsername(username);
-        Subject subject = subjectRepository.findById(code).get();
-
-        user.setAverage(user.getAverage());
-
-        user.setCredits((short) (user.getCredits() - subject.getCredits()));
-        user.setSubjectsApproved((byte) (user.getSubjectsApproved() - 1));
-
-        user.getSubjects().remove(subject);
-        userRepository.save(user);
-    }
-    */
 
     /*
     public User updateUser(User newUser, Long id) {

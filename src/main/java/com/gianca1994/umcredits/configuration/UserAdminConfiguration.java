@@ -24,6 +24,7 @@ public class UserAdminConfiguration {
             userAdmin.getRoles().add(roleRepository.findById(2L).get());
             userAdmin.setRemainingSubjects((byte) 50);
             userAdmin.setYearEligibility((byte) 1);
+            userAdmin.setActive(true);
 
             userRepository.save(userAdmin);
         };

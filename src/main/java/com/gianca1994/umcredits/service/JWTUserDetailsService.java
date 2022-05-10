@@ -1,6 +1,7 @@
 package com.gianca1994.umcredits.service;
 
 
+import com.gianca1994.umcredits.functions.EncryptData;
 import com.gianca1994.umcredits.model.Role;
 import com.gianca1994.umcredits.repository.RoleRepository;
 import org.mindrot.jbcrypt.BCrypt;
@@ -10,12 +11,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,12 +32,14 @@ public class JWTUserDetailsService implements UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private MailService mailService;
+
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         User user = userRepository.findByUsername(username);
 
         if (user == null) {
@@ -59,25 +61,26 @@ public class JWTUserDetailsService implements UserDetailsService {
         return matcher.matches();
     }
 
-    private String encryptPassword(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt(12));
-    }
-
     public User save(UserDTO user) {
         if (validateEmail(user.getEmail())) {
+            Random random = new Random();
+            String activationCode = String.valueOf(random.nextInt(999999999) + 1);
 
             User newUser = new User();
             Role standardRole = roleRepository.findById(1L).get();
 
             newUser.setUsername(user.getUsername());
-            newUser.setPassword(encryptPassword(user.getPassword()));
+            newUser.setPassword(EncryptData.encryptPassword(user.getPassword()));
             newUser.setEmail(user.getEmail());
             newUser.setFirstName(user.getFirstName());
             newUser.setLastName(user.getLastName());
             newUser.setRemainingSubjects((byte) 50);
             newUser.setYearEligibility((byte) 1);
-
+            newUser.setActive(false);
+            newUser.setCodeActivation(activationCode);
             newUser.getRoles().add(standardRole);
+
+            mailService.sendMail(user.getEmail(), user.getUsername(), activationCode);
 
             return userRepository.save(newUser);
         }
