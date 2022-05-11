@@ -16,7 +16,7 @@ public class UmcreditsApplication {
 
         SpringApplication.run(UmcreditsApplication.class, args);
 
-        log.info("UM-CREDITS API INICIALIZADA!!!");
+        log.info("¡UM-CREDITS API INITIALIZED!");
 
 
     }

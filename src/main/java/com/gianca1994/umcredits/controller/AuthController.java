@@ -3,14 +3,12 @@ package com.gianca1994.umcredits.controller;
 import com.gianca1994.umcredits.dto.JwtRequest;
 import com.gianca1994.umcredits.dto.JwtResponse;
 import com.gianca1994.umcredits.dto.UserDTO;
-import com.gianca1994.umcredits.functions.EncryptData;
 import com.gianca1994.umcredits.jwt.JwtTokenUtil;
 import com.gianca1994.umcredits.model.User;
 import com.gianca1994.umcredits.repository.UserRepository;
 import com.gianca1994.umcredits.service.JWTUserDetailsService;
 
 import com.gianca1994.umcredits.service.UserService;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +41,11 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping(value = "activateheroku")
+    public ResponseEntity<?> activateHeroku() {
+        return new ResponseEntity<>("Heroku activated", HttpStatus.OK);
+    }
+
     public boolean validateActivationCode(String username) {
         User user = userService.getUserProfile(username);
         return user.isActive();
@@ -64,7 +67,7 @@ public class AuthController {
             return new ResponseEntity<>(
                     "The user is not active, please check your email " +
                             "and make the correct activation.",
-                    HttpStatus.BAD_REQUEST
+                    HttpStatus.NON_AUTHORITATIVE_INFORMATION
             );
         }
     }
