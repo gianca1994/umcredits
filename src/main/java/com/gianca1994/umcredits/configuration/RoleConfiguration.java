@@ -13,6 +13,7 @@ public class RoleConfiguration {
         return args -> {
             roleRepository.save(new Role(1L, "STANDARD"));
             roleRepository.save(new Role(2L, "ADMIN"));
+            roleRepository.save(new Role(3L, "MODERATOR"));
         };
     }
 }

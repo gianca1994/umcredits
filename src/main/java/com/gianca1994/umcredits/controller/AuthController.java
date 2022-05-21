@@ -23,7 +23,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin(origins = "*", methods = RequestMethod.POST)
+@CrossOrigin(origins = "*", methods = {RequestMethod.POST, RequestMethod.GET})
 public class AuthController {
 
     @Autowired
@@ -74,13 +74,15 @@ public class AuthController {
 
     @PostMapping(value = "register")
     public ResponseEntity<?> saveUser(@RequestBody UserDTO user) {
-        User newUser = userDetailsService.save(user);
+        User checkUser = userRepository.findByUsername(user.getUsername());
 
-        if (newUser != null) {
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        if (checkUser != null) {
+            return new ResponseEntity<>("The user is already registered!", HttpStatus.BAD_REQUEST);
         } else {
-            return (ResponseEntity<?>) ResponseEntity.notFound();
+            User newUser = userDetailsService.save(user);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         }
+
     }
 
     private void authenticate(String username, String password) throws Exception {

@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR')")
     public ResponseEntity<Object> getAllUsers(@RequestHeader(value = "Authorization") String token) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -70,7 +70,7 @@ public class UserController {
     }
 
     @GetMapping("me")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR') or hasAuthority('STANDARD')")
     public ResponseEntity<Object> myProfile(
             @RequestHeader(value = "Authorization") String token) {
         try {
@@ -91,7 +91,7 @@ public class UserController {
     }
 
     @PutMapping("approve")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR') or hasAuthority('STANDARD')")
     public ResponseEntity<Object> approveSubject(
             @RequestHeader(value = "Authorization") String token,
             @RequestBody SubjectDTO subject) {
@@ -117,7 +117,7 @@ public class UserController {
 
 
     @DeleteMapping("deletesubject/{code}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR') or hasAuthority('STANDARD')")
     public User deleteSubjectToUser(
             @RequestHeader(value = "Authorization") String token,
             @PathVariable Long code) {
@@ -129,7 +129,7 @@ public class UserController {
     }
 
     @GetMapping("setadmin/{adminUserName}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR')")
     public ResponseEntity<Object> addRoleToUser(
             @RequestHeader(value = "Authorization") String token,
             @PathVariable String adminUserName) {
