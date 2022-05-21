@@ -10,10 +10,7 @@ import com.gianca1994.umcredits.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -47,6 +44,13 @@ public class UserService {
 
     public void deleteUser(String username) {
         User user = userRepository.findByUsername(username);
+        Role adminRole = roleRepository.findById(2L).get();
+
+        for (Role role : user.getRoles()) {
+            if (adminRole.equals(role)) {
+                return;
+            }
+        }
         userRepository.deleteById(user.getId());
     }
 
@@ -105,11 +109,23 @@ public class UserService {
 
     public Object setAdminToIdUser(String adminUserName) {
         User user = userRepository.findByUsername(adminUserName);
+        Role moderatorRole = roleRepository.findById(3L).get();
         Role adminRole = roleRepository.findById(2L).get();
         Role standardRole = roleRepository.findById(1L).get();
 
-        user.getRoles().remove(standardRole);
-        user.getRoles().add(adminRole);
+        for (Role role : user.getRoles()) {
+            if (adminRole.equals(role)) {
+                return null;
+            } else {
+                if (moderatorRole.equals(role)) {
+                    user.getRoles().remove(moderatorRole);
+                    user.getRoles().add(standardRole);
+                } else {
+                    user.getRoles().remove(standardRole);
+                    user.getRoles().add(moderatorRole);
+                }
+            }
+        }
 
         return userRepository.save(user);
     }

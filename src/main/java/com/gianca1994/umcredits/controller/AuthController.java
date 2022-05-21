@@ -23,7 +23,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin(origins = "*", methods = RequestMethod.POST)
+@CrossOrigin(origins = "*", methods = {RequestMethod.POST, RequestMethod.GET})
 public class AuthController {
 
     @Autowired

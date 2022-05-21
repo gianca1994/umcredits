@@ -37,7 +37,7 @@ public class SubjectController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR') or hasAuthority('STANDARD')")
     public Object getSubjects(
             @RequestHeader(value = "Authorization") String token) {
         try {
@@ -61,13 +61,13 @@ public class SubjectController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR') or hasAuthority('STANDARD')")
     public Optional<Subject> getSubject(@PathVariable Long id) {
         return this.subjectService.getSubject(id);
     }
 
     @PostMapping()
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR')")
     public Subject saveSubject(@RequestBody Subject subject) {
         return subjectService.saveSubject(subject);
     }
