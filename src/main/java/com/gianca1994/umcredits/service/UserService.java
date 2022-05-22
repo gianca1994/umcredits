@@ -97,14 +97,20 @@ public class UserService {
         User user = userRepository.findByUsername(username);
         Subject subject = subjectRepository.findById(code).get();
 
-        user.setAverage(user.getAverage() - subject.getNote());
-        user.setCredits((short) (user.getCredits() - subject.getCredits()));
-        user.setSubjectsApproved((byte) (user.getSubjectsApproved() - 1));
-        user.setRemainingSubjects((byte) (user.getRemainingSubjects() + 1));
+        for (Subject subjectUser : user.getSubjects()) {
+            if (subjectUser == subject) {
+                user.setAverage(user.getAverage() - subject.getNote());
+                user.setCredits((short) (user.getCredits() - subject.getCredits()));
+                user.setSubjectsApproved((byte) (user.getSubjectsApproved() - 1));
+                user.setRemainingSubjects((byte) (user.getRemainingSubjects() + 1));
+                user.setYearEligibility(yearEligibilityCalculate(user.getCredits()));
 
-        user.getSubjects().remove(subject);
-        userRepository.save(user);
-        return user;
+                user.getSubjects().remove(subject);
+                userRepository.save(user);
+                return user;
+            }
+        }
+        return null;
     }
 
     public Object setAdminToIdUser(String adminUserName) {
