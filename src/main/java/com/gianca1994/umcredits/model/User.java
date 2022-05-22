@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -43,6 +42,19 @@ public class User {
 
     @Column()
     private byte subjectsApproved;
+
+    @Column()
+    private byte remainingSubjects;
+
+    @Column()
+    private byte yearEligibility;
+
+    @Column()
+    private boolean active;
+
+    @Column()
+    @JsonIgnore
+    private String codeActivation;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

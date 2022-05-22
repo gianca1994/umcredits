@@ -2,6 +2,8 @@ package com.gianca1994.umcredits.controller;
 
 import com.gianca1994.umcredits.dto.SubjectDTO;
 import com.gianca1994.umcredits.jwt.JwtTokenUtil;
+import com.gianca1994.umcredits.model.User;
+import com.gianca1994.umcredits.repository.SubjectRepository;
 import com.gianca1994.umcredits.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE})
 @RequestMapping("api/v1/users")
 public class UserController {
 
@@ -27,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR')")
     public ResponseEntity<Object> getAllUsers(@RequestHeader(value = "Authorization") String token) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -46,14 +48,15 @@ public class UserController {
         }
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/{deleteUsername}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> deleteUser(
-            @RequestHeader(value = "Authorization") String token) {
+            @RequestHeader(value = "Authorization") String token,
+            @PathVariable String deleteUsername) {
 
         try {
             if (token != null && token.startsWith("Bearer ")) {
-                userService.deleteUser(getTokenUser(token));
+                userService.deleteUser(deleteUsername);
                 return new ResponseEntity<>("User deleted correctly!", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(
@@ -67,9 +70,9 @@ public class UserController {
     }
 
     @GetMapping("me")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
-    public ResponseEntity<Object> myProfile(@RequestHeader(value = "Authorization") String token) {
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR') or hasAuthority('STANDARD')")
+    public ResponseEntity<Object> myProfile(
+            @RequestHeader(value = "Authorization") String token) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
                 return new ResponseEntity<>(
@@ -88,21 +91,20 @@ public class UserController {
     }
 
     @PutMapping("approve")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STANDARD')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR') or hasAuthority('STANDARD')")
     public ResponseEntity<Object> approveSubject(
             @RequestHeader(value = "Authorization") String token,
             @RequestBody SubjectDTO subject) {
 
         try {
             if (token != null && token.startsWith("Bearer ")) {
-
-                return new ResponseEntity<>(
-                        userService.saveSubjectToUser(
-                                getTokenUser(token),
-                                subject
-                        ),
-                        HttpStatus.OK
+                userService.saveSubjectToUser(
+                        getTokenUser(token),
+                        subject
                 );
+                return new ResponseEntity<>(
+                        userService.getUserProfile(getTokenUser(token)),
+                        HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(
                         "The token is required to perform this action.",
@@ -113,16 +115,29 @@ public class UserController {
         }
     }
 
-    @GetMapping("setadmin/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+
+    @DeleteMapping("deletesubject/{code}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR') or hasAuthority('STANDARD')")
+    public User deleteSubjectToUser(
+            @RequestHeader(value = "Authorization") String token,
+            @PathVariable Long code) {
+
+        if (token != null && token.startsWith("Bearer ")) {
+            return userService.deleteSubjectToUser(getTokenUser(token), code);
+        }
+        return null;
+    }
+
+    @GetMapping("setadmin/{adminUserName}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR')")
     public ResponseEntity<Object> addRoleToUser(
             @RequestHeader(value = "Authorization") String token,
-            @RequestParam Long id) {
+            @PathVariable String adminUserName) {
 
         try {
             if (token != null && token.startsWith("Bearer ")) {
                 return new ResponseEntity<>(
-                        userService.setAdminToIdUser(id),
+                        userService.setAdminToIdUser(adminUserName),
                         HttpStatus.OK
                 );
             } else {
@@ -136,7 +151,6 @@ public class UserController {
         }
     }
 }
-
     /*
     @PutMapping("/{id}")
     public User updateUser(@RequestBody User newUser, @PathVariable Long id) {
@@ -144,3 +158,4 @@ public class UserController {
     }
 
      */
+

@@ -10,7 +10,7 @@ import com.gianca1994.umcredits.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.*;
 
 
 @Service
@@ -30,15 +30,46 @@ public class UserService {
     }
 
     public User getUserProfile(String username) {
-        return userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
+        float average = 0;
+
+        for (Subject b : user.getSubjects()) {
+            average += b.getNote();
+        }
+
+        if (user.getSubjectsApproved() > 0)
+            user.setAverage(average / user.getSubjectsApproved());
+        return user;
     }
 
     public void deleteUser(String username) {
         User user = userRepository.findByUsername(username);
+        Role adminRole = roleRepository.findById(2L).get();
+
+        for (Role role : user.getRoles()) {
+            if (adminRole.equals(role)) {
+                return;
+            }
+        }
         userRepository.deleteById(user.getId());
     }
 
-    public User saveSubjectToUser(String username, SubjectDTO subject) throws Exception {
+    public byte yearEligibilityCalculate(short credits) {
+        byte yearEligibility = 1;
+
+        if (credits >= 130) {
+            yearEligibility = 5;
+        } else if (credits >= 90) {
+            yearEligibility = 4;
+        } else if (credits >= 38) {
+            yearEligibility = 3;
+        } else if (credits >= 12) {
+            yearEligibility = 2;
+        }
+        return yearEligibility;
+    }
+
+    public User saveSubjectToUser(String username, SubjectDTO subject) {
 
         User user = userRepository.findByUsername(username);
         Subject subjectAdd = subjectRepository.findById(subject.getCode()).get();
@@ -49,25 +80,58 @@ public class UserService {
         }
 
         if (subject.getNote() >= 6) {
+            subjectAdd.setNote(subject.getNote());
             user.getSubjects().add(subjectAdd);
             user.setCredits((short) (user.getCredits() + subjectAdd.getCredits()));
-
-            if (user.getSubjectsApproved() > 1) {
-                user.setAverage((user.getAverage() + subject.getNote()) / 2);
-            } else {
-                user.setAverage(subject.getNote());
-            }
             user.setSubjectsApproved((byte) (user.getSubjectsApproved() + 1));
+            user.setRemainingSubjects((byte) (user.getRemainingSubjects() - 1));
+            user.setYearEligibility(yearEligibilityCalculate(user.getCredits()));
+            user.setAverage(user.getAverage() + subjectAdd.getNote());
+
             return userRepository.save(user);
         }
         return user;
     }
 
-    public Object setAdminToIdUser(Long id) {
-        User user = userRepository.getById(id);
-        Role adminRole = roleRepository.findById(2L).get();
+    public User deleteSubjectToUser(String username, Long code) {
+        User user = userRepository.findByUsername(username);
+        Subject subject = subjectRepository.findById(code).get();
 
-        user.getRoles().add(adminRole);
+        for (Subject subjectUser : user.getSubjects()) {
+            if (subjectUser == subject) {
+                user.setAverage(user.getAverage() - subject.getNote());
+                user.setCredits((short) (user.getCredits() - subject.getCredits()));
+                user.setSubjectsApproved((byte) (user.getSubjectsApproved() - 1));
+                user.setRemainingSubjects((byte) (user.getRemainingSubjects() + 1));
+                user.setYearEligibility(yearEligibilityCalculate(user.getCredits()));
+
+                user.getSubjects().remove(subject);
+                userRepository.save(user);
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public Object setAdminToIdUser(String adminUserName) {
+        User user = userRepository.findByUsername(adminUserName);
+        Role moderatorRole = roleRepository.findById(3L).get();
+        Role adminRole = roleRepository.findById(2L).get();
+        Role standardRole = roleRepository.findById(1L).get();
+
+        for (Role role : user.getRoles()) {
+            if (adminRole.equals(role)) {
+                return null;
+            } else {
+                if (moderatorRole.equals(role)) {
+                    user.getRoles().remove(moderatorRole);
+                    user.getRoles().add(standardRole);
+                } else {
+                    user.getRoles().remove(standardRole);
+                    user.getRoles().add(moderatorRole);
+                }
+            }
+        }
 
         return userRepository.save(user);
     }

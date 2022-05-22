@@ -16,7 +16,7 @@ public class SubjectService {
     SubjectRepository subjectRepository;
 
     public ArrayList<Subject> getSubjects() {
-        return (ArrayList<Subject>) this.subjectRepository.findAll();
+        return (ArrayList<Subject>) subjectRepository.findAll();
     }
 
     public Optional<Subject> getSubject(Long code) {
