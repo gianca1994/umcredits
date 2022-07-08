@@ -33,9 +33,6 @@ public class JWTUserDetailsService implements UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
-    private MailService mailService;
-
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
 
@@ -64,9 +61,6 @@ public class JWTUserDetailsService implements UserDetailsService {
 
     public User save(UserDTO user) {
         if (validateEmail(user.getEmail())) {
-            // Random random = new Random();
-            // String activationCode = String.valueOf(random.nextInt(999999999) + 1);
-
             User newUser = new User();
             Role standardRole = roleRepository.findById(1L).get();
 
@@ -77,14 +71,9 @@ public class JWTUserDetailsService implements UserDetailsService {
             newUser.setLastName(user.getLastName());
             newUser.setRemainingSubjects((byte) 50);
             newUser.setYearEligibility((byte) 1);
-            newUser.setActive(true);
-            // newUser.setCodeActivation(activationCode);
             newUser.getRoles().add(standardRole);
 
             if (Objects.equals(user.getUsername(), "gianca")) newUser.getRoles().add(roleRepository.findById(2L).get());
-
-
-            // mailService.sendMail(user.getEmail(), user.getUsername(), activationCode);
 
             return userRepository.save(newUser);
         }
