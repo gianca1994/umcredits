@@ -46,30 +46,15 @@ public class AuthController {
         return new ResponseEntity<>("Heroku activated", HttpStatus.OK);
     }
 
-    public boolean validateActivationCode(String username) {
-        User user = userService.getUserProfile(username);
-        return user.isActive();
-    }
-
     @PostMapping(value = "login")
     public ResponseEntity<?> createAuthenticationToken(
             @RequestBody JwtRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final String token = jwtTokenUtil.generateToken(userDetails);
+        return ResponseEntity.ok(new JwtResponse(token));
 
-        if (validateActivationCode(authenticationRequest.getUsername())) {
-            final UserDetails userDetails = userDetailsService
-                    .loadUserByUsername(authenticationRequest.getUsername());
-            final String token = jwtTokenUtil.generateToken(userDetails);
-
-            return ResponseEntity.ok(new JwtResponse(token));
-        } else {
-            return new ResponseEntity<>(
-                    "The user is not active, please check your email " +
-                            "and make the correct activation.",
-                    HttpStatus.NON_AUTHORITATIVE_INFORMATION
-            );
-        }
     }
 
     @PostMapping(value = "register")
@@ -82,7 +67,6 @@ public class AuthController {
             User newUser = userDetailsService.save(user);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         }
-
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -93,24 +77,5 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
-    }
-
-    @PostMapping(value = "/{username}={codeActivation}")
-    public ResponseEntity<Object> activateAccount(@PathVariable String username,
-                                                  @PathVariable String codeActivation) {
-
-        if (!validateActivationCode(username)) {
-            User user = userRepository.findByUsername(username);
-
-            if (Objects.equals(codeActivation, user.getCodeActivation())) {
-                user.setActive(true);
-                user.setCodeActivation(null);
-                userRepository.save(user);
-                return new ResponseEntity<>("The user was successfully activated!", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Activation code does not match.", HttpStatus.NO_CONTENT);
-            }
-        }
-        return new ResponseEntity<>("The user is already active.", HttpStatus.NOT_FOUND);
     }
 }

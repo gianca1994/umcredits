@@ -49,13 +49,6 @@ public class User {
     @Column()
     private byte yearEligibility;
 
-    @Column()
-    private boolean active;
-
-    @Column()
-    @JsonIgnore
-    private String codeActivation;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_subjects",
