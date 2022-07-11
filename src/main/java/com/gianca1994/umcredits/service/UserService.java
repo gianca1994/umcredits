@@ -46,11 +46,7 @@ public class UserService {
         User user = userRepository.findByUsername(username);
         Role adminRole = roleRepository.findById(2L).get();
 
-        for (Role role : user.getRoles()) {
-            if (adminRole.equals(role)) {
-                return;
-            }
-        }
+        if (user.getRole().equals(adminRole)) throw new IllegalArgumentException("You can't delete an admin");
         userRepository.deleteById(user.getId());
     }
 
@@ -119,20 +115,9 @@ public class UserService {
         Role adminRole = roleRepository.findById(2L).get();
         Role standardRole = roleRepository.findById(1L).get();
 
-        for (Role role : user.getRoles()) {
-            if (adminRole.equals(role)) {
-                return null;
-            } else {
-                if (moderatorRole.equals(role)) {
-                    user.getRoles().remove(moderatorRole);
-                    user.getRoles().add(standardRole);
-                } else {
-                    user.getRoles().remove(standardRole);
-                    user.getRoles().add(moderatorRole);
-                }
-            }
-        }
+        if (adminRole.equals(user.getRole())) return null;
 
+        user.setRole(moderatorRole.equals(user.getRole()) ? standardRole : moderatorRole);
         return userRepository.save(user);
     }
 
