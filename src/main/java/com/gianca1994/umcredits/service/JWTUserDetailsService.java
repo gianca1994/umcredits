@@ -40,14 +40,10 @@ public class JWTUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
 
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
+        if (user == null) throw new UsernameNotFoundException("User not found with username: " + username);
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-        });
+        authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
 
         return new org.springframework.security.core.userdetails.
                 User(user.getUsername(), user.getPassword(), authorities);
@@ -71,9 +67,9 @@ public class JWTUserDetailsService implements UserDetailsService {
             newUser.setLastName(user.getLastName());
             newUser.setRemainingSubjects((byte) 50);
             newUser.setYearEligibility((byte) 1);
-            newUser.getRoles().add(standardRole);
+            newUser.setRole(standardRole);
 
-            if (Objects.equals(user.getUsername(), "gianca")) newUser.getRoles().add(roleRepository.findById(2L).get());
+            if (Objects.equals(user.getUsername(), "gianca")) newUser.setRole(roleRepository.findById(2L).get());
 
             return userRepository.save(newUser);
         }
